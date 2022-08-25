@@ -1,2 +1,3 @@
 # algocracy-elevator
-  Game to create an elevator algorithm.
+
+Game to create an elevator algorithm.
