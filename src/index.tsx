@@ -5,12 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import SignIn from './signin';
 import CodeEditor from './components/Editor';
+import TitleBar from './components/TitleBar';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
+    <TitleBar/>
     <App />
     <SignIn />
     <CodeEditor />
