@@ -1,0 +1,17 @@
+.gameArea{
+    height: 50rem;
+    background-color: #282c34;
+}
+
+.resultLabel{
+    display: inline-block;
+    width: 10rem;
+    color: #ccc;
+    text-align: left;
+}
+.resultValue {
+    display: inline-block;
+    width: 10rem;
+    color: #ccc;
+    text-align: right;
+}

@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import SignIn from './signin';
 import CodeEditor from './components/Editor';
 import TitleBar from './components/TitleBar';
+import Game from './components/Game';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,9 +13,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <TitleBar/>
-    <App />
-    <SignIn />
+    {/* <App /> */}
+    <Game />
     <CodeEditor />
+    <SignIn />
   </React.StrictMode>
 );
 

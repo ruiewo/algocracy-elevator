@@ -11,6 +11,8 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logo from '../logo.svg';
+import './TitleBar.css';
+
 
 const pages = ['Document', 'Ranking', 'Wiki'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
