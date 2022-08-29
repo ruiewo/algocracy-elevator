@@ -1,6 +1,5 @@
-import { Floor } from './floor';
-import { Random } from './random';
 import { gameRenderer } from './gameRenderer';
+import { World } from './world';
 
 type WorldOption = {
     seed: number;
@@ -10,40 +9,9 @@ type WorldOption = {
 };
 
 export const gameManager = (() => {
-    let random: Random;
-
-    function createFloor(count: number) {
-        const floors = [];
-        for (let i = 0; i < count; i++) {
-            floors.push(new Floor(i));
-        }
-        return floors;
-    }
-
-    function createElevator(count: number) {
-        //
-    }
-
-    function createUser(count: number) {
-        //
-    }
-
-    function createWorld(option: WorldOption) {
-        random = new Random(option.seed);
-
-        const floors = createFloor(option.floorCount);
-        const elevators = createElevator(option.elevatorCount);
-
-        const world = {};
-
-        return world;
-    }
-
     return {
         createWorld: (option: WorldOption) => {
-            createUser(option.floorCount);
-
-            const world = {};
+            const world = new World(option);
 
             return world;
         },
