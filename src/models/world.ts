@@ -51,7 +51,7 @@ export class World {
         //
     };
 
-    update = (hoge: any) => {
-        //
+    update = (deltaTime: number) => {
+        this.elapsedTime += deltaTime;
     };
 }

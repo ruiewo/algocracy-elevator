@@ -15,7 +15,7 @@ export class WorldController {
     private isPlaying = false;
 
     public start = (world: World, userCode: UserCode, requestAnimationFrame: any) => {
-        this.isPlaying = false;
+        this.isPlaying = true;
 
         let lastUpdatedTime: number | null = null;
         let firstUpdate = true;
@@ -51,7 +51,7 @@ export class WorldController {
                     scaledDt -= this.frameSec;
                 }
 
-                gameRenderer.update();
+                gameRenderer.update(world.elapsedTime);
                 // world.updateDisplayPositions();
                 // world.trigger('stats_display_changed'); // TODO: Trigger less often for performance reasons etc
             }

@@ -27,7 +27,7 @@ export default function Game() {
             <GameObjectsContext.Provider value={gameObjects}>
                 <Stack className="gameArea" direction="row" justifyContent={'center'}>
                     <Screen />
-                    <Result />
+                    <Result start={gameManager.start} />
                 </Stack>
             </GameObjectsContext.Provider>
         </GameResultContext.Provider>
@@ -38,15 +38,15 @@ function Screen() {
     return <Box className="screenArea" sx={{ border: 1, borderColor: 'grey.500' }}></Box>;
 }
 
-function Result() {
+function Result(props: { start: () => void }) {
     const { time, unit, unitPerSec, waitingTimeAvg, waitingTimeMax } = useContext(GameResultContext);
 
     return (
         <Box className="resultArea" padding={2} sx={{ border: 1, borderColor: 'grey.500' }}>
             <Stack direction="row" justifyContent={'center'} spacing={2} paddingBottom={2}>
-                <Button variant="contained">Start</Button>
-                <Button variant="contained">Start</Button>
-                <Button variant="contained">Start</Button>
+                <Button variant="contained" onClick={props.start}>
+                    Start
+                </Button>
             </Stack>
             <div>
                 <span className="resultLabel">Time</span>

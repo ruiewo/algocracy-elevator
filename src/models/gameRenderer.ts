@@ -18,13 +18,13 @@ export const gameRenderer = (() => {
     let setGameObjects: SetGameObjects;
     let setGameResult: SetGameResult;
 
-    function update() {
+    function update(elapsedTime: number) {
         setGameObjects({
             time: '',
         });
 
         setGameResult({
-            time: '00:00',
+            time: convertTime(elapsedTime),
             unit: '5',
             unitPerSec: '0.0',
             waitingTimeAvg: '00:00',
@@ -41,3 +41,14 @@ export const gameRenderer = (() => {
         },
     };
 })();
+
+function convertTime(timeSec: number) {
+    const min = Math.floor(timeSec / 60)
+        .toString()
+        .padStart(2, '0');
+    const sec = Math.floor(timeSec % 60)
+        .toString()
+        .padStart(2, '0');
+
+    return `${min}:${sec}`; // '00:00';
+}
