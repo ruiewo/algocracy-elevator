@@ -1,17 +1,21 @@
-.gameArea{
+.gameArea {
     height: 50rem;
     background-color: #282c34;
 }
 
-.resultLabel{
+.resultLabel {
     display: inline-block;
-    width: 10rem;
+    width: 8rem;
     color: #ccc;
     text-align: left;
 }
 .resultValue {
     display: inline-block;
-    width: 10rem;
+    width: 8rem;
     color: #ccc;
     text-align: right;
+}
+
+.resultArea {
+    width: 20rem;
 }
