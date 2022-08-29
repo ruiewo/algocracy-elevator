@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import './Game.css';
 import { GameResultContext, GameObjectsContext } from '../context/gameContext';
 import { Box, Button, Stack } from '@mui/material';
+import { gameManager } from '../models/gameManager';
 
 export default function Game() {
     const gameResultInitial = {
@@ -19,20 +20,22 @@ export default function Game() {
     const [gameResult, setGameResult] = useState(gameResultInitial);
     const [gameObjects, setGameObjects] = useState(gameObjectsInitial);
 
+    gameManager.initialize(setGameObjects, setGameResult);
+
     return (
         <GameResultContext.Provider value={gameResult}>
             <GameObjectsContext.Provider value={gameObjects}>
-                <div className="gameArea">
+                <Stack className="gameArea" direction="row" justifyContent={'center'}>
                     <Screen />
                     <Result />
-                </div>
+                </Stack>
             </GameObjectsContext.Provider>
         </GameResultContext.Provider>
     );
 }
 
 function Screen() {
-    return <div></div>;
+    return <Box className="screenArea" sx={{ border: 1, borderColor: 'grey.500' }}></Box>;
 }
 
 function Result() {

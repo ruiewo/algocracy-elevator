@@ -1,5 +1,6 @@
 import { Floor } from './floor';
 import { Random } from './random';
+import { gameRenderer } from './gameRenderer';
 
 type WorldOption = {
     seed: number;
@@ -46,5 +47,6 @@ export const gameManager = (() => {
 
             return world;
         },
+        initialize: gameRenderer.initialize,
     };
 })();
