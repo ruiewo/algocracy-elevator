@@ -14,8 +14,8 @@ export class WorldController {
     private timeScale = 1.0;
     private isPlaying = false;
 
-    public start = (world: World, userCode: UserCode, requestAnimationFrame: any) => {
-        this.isPlaying = true;
+    public start = (world: World, userCode: UserCode, requestAnimationFrame: any, autoStart = false) => {
+        this.isPlaying = autoStart;
 
         let lastUpdatedTime: number | null = null;
         let firstUpdate = true;
@@ -68,6 +68,11 @@ export class WorldController {
 
     public changePlayingState = (isPlaying: boolean) => {
         this.isPlaying = isPlaying;
+        // controller.trigger('timescale_changed');
+    };
+
+    public togglePlayingState = () => {
+        this.isPlaying = !this.isPlaying;
         // controller.trigger('timescale_changed');
     };
 

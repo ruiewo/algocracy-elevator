@@ -6,6 +6,7 @@ type SetGameObjects = React.Dispatch<
 
 type SetGameResult = React.Dispatch<
     React.SetStateAction<{
+        isPlaying: boolean;
         time: string;
         unit: string;
         unitPerSec: string;
@@ -24,6 +25,7 @@ export const gameRenderer = (() => {
         });
 
         setGameResult({
+            isPlaying: false,
             time: convertTime(elapsedTime),
             unit: '5',
             unitPerSec: '0.0',

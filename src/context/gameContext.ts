@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 type GameResultType = {
+    isPlaying: boolean;
     time: string;
     unit: string;
     unitPerSec: string;
@@ -13,6 +14,7 @@ type GameObjectsType = {
 };
 
 const gameResult = {
+    isPlaying: false,
     time: '00:01',
     unit: '1',
     unitPerSec: '0.1',

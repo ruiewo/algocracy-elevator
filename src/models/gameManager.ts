@@ -6,9 +6,12 @@ import { WorldController } from './worldController';
 
 export const gameManager = (() => {
     const worldController = new WorldController();
+    let world: World;
 
-    function start() {
-        const world = new World({
+    run();
+
+    function run() {
+        world = createWorld({
             seed: 0,
             floorCount: 0,
             elevatorCount: 0,
@@ -22,8 +25,17 @@ export const gameManager = (() => {
                 initialize: (elevators: Elevator[], floors: Floor[]) => {},
                 update: (dt: number, elevators: Elevator[], floors: Floor[]) => {},
             },
-            window.requestAnimationFrame
+            window.requestAnimationFrame,
+            false
         );
+    }
+
+    function createWorld(option: WorldOption) {
+        return new World(option);
+    }
+
+    function toggle() {
+        worldController.togglePlayingState();
     }
 
     return {
@@ -33,6 +45,6 @@ export const gameManager = (() => {
             return world;
         },
         initialize: gameRenderer.initialize,
-        start,
+        toggle,
     };
 })();

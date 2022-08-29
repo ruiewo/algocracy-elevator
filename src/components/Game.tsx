@@ -6,6 +6,7 @@ import { gameManager } from '../models/gameManager';
 
 export default function Game() {
     const gameResultInitial = {
+        isPlaying: false,
         time: '00:00',
         unit: '0',
         unitPerSec: '0.0',
@@ -27,7 +28,7 @@ export default function Game() {
             <GameObjectsContext.Provider value={gameObjects}>
                 <Stack className="gameArea" direction="row" justifyContent={'center'}>
                     <Screen />
-                    <Result start={gameManager.start} />
+                    <Result start={gameManager.toggle} />
                 </Stack>
             </GameObjectsContext.Provider>
         </GameResultContext.Provider>
