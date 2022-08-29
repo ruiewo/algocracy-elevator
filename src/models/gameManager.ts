@@ -1,12 +1,5 @@
 import { gameRenderer } from './gameRenderer';
-import { World } from './world';
-
-type WorldOption = {
-    seed: number;
-    floorCount: number;
-    elevatorCount: number;
-    spawnRate: number;
-};
+import { World, WorldOption } from './world';
 
 export const gameManager = (() => {
     return {

@@ -1,4 +1,12 @@
+import { Elevator } from './elevator';
+import { Floor } from './floor';
 import { World } from './world';
+import { gameRenderer } from './gameRenderer';
+
+type UserCode = {
+    initialize: (elevators: Elevator[], floors: Floor[]) => void;
+    update: (dt: number, elevators: Elevator[], floors: Floor[]) => void;
+};
 
 export class WorldController {
     private frame = 60;
@@ -6,9 +14,7 @@ export class WorldController {
     private timeScale = 1.0;
     private isPlaying = false;
 
-    constructor() {}
-
-    public start = (world: World, codeObj, requestAnimationFrame) => {
+    public start = (world: World, userCode: UserCode, requestAnimationFrame: any) => {
         this.isPlaying = false;
 
         let lastUpdatedTime: number | null = null;
@@ -22,8 +28,8 @@ export class WorldController {
                     firstUpdate = false;
                     // This logic prevents infite loops in usercode from breaking the page permanently - don't evaluate user code until game is unpaused.
                     try {
-                        codeObj.init(world.elevatorInterfaces, world.floors);
-                        world.init();
+                        userCode.initialize(world.elevators, world.floors);
+                        // world.init();
                     } catch (e) {
                         this.handleError(e);
                     }
@@ -34,7 +40,7 @@ export class WorldController {
                 scaledDt = Math.min(scaledDt, this.frameSec * 3 * this.timeScale); // Limit to prevent unhealthy substepping
 
                 try {
-                    codeObj.update(scaledDt, world.elevators, world.floors);
+                    userCode.update(scaledDt, world.elevators, world.floors);
                 } catch (e) {
                     this.handleError(e);
                 }
@@ -45,8 +51,9 @@ export class WorldController {
                     scaledDt -= this.frameSec;
                 }
 
-                world.updateDisplayPositions();
-                world.trigger('stats_display_changed'); // TODO: Trigger less often for performance reasons etc
+                gameRenderer.update();
+                // world.updateDisplayPositions();
+                // world.trigger('stats_display_changed'); // TODO: Trigger less often for performance reasons etc
             }
 
             lastUpdatedTime = time;
