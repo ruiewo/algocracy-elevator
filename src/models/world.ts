@@ -11,6 +11,12 @@ export type WorldOption = {
     spawnRate: number;
 };
 
+export type WorldSetting = {
+    floorCount: number;
+    elevatorCount: number;
+    elevatorCapacity: number;
+};
+
 export class World {
     private random: Random;
     public floors: Floor[];
@@ -23,12 +29,20 @@ export class World {
     public waitingTimeMax = 0.0;
     public waitingTimeTotal = 0.0;
 
+    private worldSetting: WorldSetting;
+
     constructor(option: WorldOption) {
         this.random = new Random(option.seed);
 
         this.floors = this.createFloor(option.floorCount);
         this.elevators = this.createElevator(option.elevatorCount, option.floorCount, option.elevatorCapacity);
         this.users = [];
+
+        this.worldSetting = {
+            floorCount: option.floorCount,
+            elevatorCount: option.elevatorCount,
+            elevatorCapacity: option.elevatorCapacity,
+        };
     }
 
     createFloor = (count: number) => {
@@ -54,4 +68,8 @@ export class World {
     update = (deltaTime: number) => {
         this.elapsedTime += deltaTime;
     };
+
+    get setting() {
+        return this.worldSetting;
+    }
 }

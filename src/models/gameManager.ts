@@ -13,9 +13,9 @@ export const gameManager = (() => {
     function run() {
         world = createWorld({
             seed: 0,
-            floorCount: 0,
-            elevatorCount: 0,
-            elevatorCapacity: 0,
+            floorCount: 3,
+            elevatorCount: 1,
+            elevatorCapacity: 4,
             spawnRate: 0,
         });
 
@@ -46,5 +46,8 @@ export const gameManager = (() => {
         },
         initialize: gameRenderer.initialize,
         toggle,
+        get worldSetting() {
+            return world.setting;
+        },
     };
 })();

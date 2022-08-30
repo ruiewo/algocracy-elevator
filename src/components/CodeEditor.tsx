@@ -11,7 +11,7 @@ export default function CodeEditor() {
     const [code, setCode] = React.useState(`{\n    initialize: (elevators, floors) => {};\n    update: (deltaTime, elevators, floors) => {};\n};`);
 
     return (
-        <Stack justifyContent={'center'} flexDirection={'row'} bgcolor={'#464'}>
+        <Stack justifyContent={'center'} flexDirection={'row'}>
             <Editor
                 value={code}
                 onValueChange={code => setCode(code)}
@@ -20,7 +20,7 @@ export default function CodeEditor() {
                 style={{
                     fontFamily: '"Fira code", "Fira Mono", monospace',
                     fontSize: 12,
-                    background: 'powderblue',
+                    background: '#d5eee8',
                     width: '60rem',
                     minHeight: '20rem',
                 }}

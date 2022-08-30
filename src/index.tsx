@@ -6,6 +6,8 @@ import SignIn from './signin';
 import CodeEditor from './components/CodeEditor';
 import TitleBar from './components/TitleBar';
 import Game from './components/Game';
+import { Copyright } from './components/Copyright';
+// import { Copyright } from '@mui/icons-material';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -14,7 +16,8 @@ root.render(
         {/* <App /> */}
         <Game />
         <CodeEditor />
-        <SignIn />
+        {/* <SignIn /> */}
+        <Copyright sx={{ mt: 8, mb: 4 }} />
     </React.StrictMode>
 );
 

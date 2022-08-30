@@ -3,6 +3,7 @@ import './Game.css';
 import { GameResultContext, GameObjectsContext } from '../context/gameContext';
 import { Box, Button, Stack } from '@mui/material';
 import { gameManager } from '../models/gameManager';
+import { WorldSetting } from '../models/world';
 
 export default function Game() {
     const gameResultInitial = {
@@ -23,11 +24,13 @@ export default function Game() {
 
     gameManager.initialize(setGameObjects, setGameResult);
 
+    const worldSetting = gameManager.worldSetting;
+
     return (
         <GameResultContext.Provider value={gameResult}>
             <GameObjectsContext.Provider value={gameObjects}>
                 <Stack className="gameArea" direction="row" justifyContent={'center'}>
-                    <Screen />
+                    <Screen setting={worldSetting} />
                     <Result start={gameManager.toggle} />
                 </Stack>
             </GameObjectsContext.Provider>
@@ -35,18 +38,32 @@ export default function Game() {
     );
 }
 
-function Screen() {
-    return <Box className="screenArea" sx={{ border: 1, borderColor: 'grey.500' }}></Box>;
+function Screen(props: { setting: WorldSetting }) {
+    const floors = [...new Array(props.setting.floorCount)].map((_, i) => Floor(i));
+
+    return (
+        <Stack className="screenArea" flexDirection={'column'} justifyContent={'center'} sx={{ border: 1, borderColor: 'grey.500' }}>
+            <Stack flexDirection={'column-reverse'}>{floors}</Stack>
+        </Stack>
+    );
+}
+
+function Floor(index: number) {
+    return (
+        <Box key={index} sx={{ border: 1, color: 'snow', borderColor: 'green', height: '5rem', position: 'relative' }}>
+            Floor {index + 1}
+        </Box>
+    );
 }
 
 function Result(props: { start: () => void }) {
-    const { time, unit, unitPerSec, waitingTimeAvg, waitingTimeMax } = useContext(GameResultContext);
+    const { isPlaying, time, unit, unitPerSec, waitingTimeAvg, waitingTimeMax } = useContext(GameResultContext);
 
     return (
         <Box className="resultArea" padding={2} sx={{ border: 1, borderColor: 'grey.500' }}>
             <Stack direction="row" justifyContent={'center'} spacing={2} paddingBottom={2}>
                 <Button variant="contained" onClick={props.start}>
-                    Start
+                    {isPlaying ? 'stop' : 'start'}
                 </Button>
             </Stack>
             <div>
