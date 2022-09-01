@@ -51,7 +51,6 @@ function createButton(option: ButtonOption) {
         ripple.addEventListener('animationend', e => {
             ripple.remove();
         });
-        console.log(el);
     });
 
     return button;

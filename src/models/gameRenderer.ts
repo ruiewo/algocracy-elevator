@@ -79,7 +79,6 @@ export const gameRenderer = (() => {
     function initialize(worldController: WorldController) {
         worldController.on(AppEvent.playStateChanged, (isPlaying: boolean) => {
             startButton.textContent = isPlaying ? 'Stop' : 'Start';
-            console.log('b');
         });
     }
 
