@@ -1,0 +1,165 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body,
+header,
+main,
+footer,
+h1,
+h2,
+h3,
+h4,
+ul,
+ol,
+dl,
+li,
+dt,
+dd,
+p,
+div,
+span,
+img,
+a,
+button,
+table,
+tr,
+th,
+td,
+form,
+input,
+label {
+  border: 0;
+  font-weight: normal;
+  font-size: 1rem;
+  vertical-align: baseline;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:active:not([disabled]) {
+  transform: scale(0.95);
+}
+
+html {
+  font-size: 10px;
+  font-family: "Noto Serif JP", serif;
+}
+
+button {
+  font-family: "Noto Serif JP", serif;
+}
+
+@font-face {
+  font-family: "DSEG7Classic";
+  src: url("./fonts/DSEG7/Classic-Bold.woff2") format("woff2"), url("../fonts/DSEG7/Classic-Bold.woff") format("woff"), url("./fonts/DSEG7/Classic-Bold.ttf") format("truetype");
+}
+@media screen and (max-width: 600px) {
+  /* for smart phone */
+}
+@media screen and (max-width: 1024px) {
+  /* for tablet */
+}
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: #282c34;
+}
+
+/* HEADER */
+header {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 2rem;
+  width: 100%;
+  height: 4rem;
+  height: 8rem;
+  background-color: #464;
+  color: snow;
+}
+header .title {
+  font-size: 2rem;
+}
+header .divider {
+  flex-grow: 1;
+}
+header .btn {
+  color: snow;
+  font-size: 2rem;
+}
+
+.appIcon {
+  width: 3rem;
+  height: 3rem;
+  margin-right: 2rem;
+  pointer-events: none;
+  background-image: url("./images/logo.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.btn {
+  position: relative;
+  width: 12rem;
+  height: 3rem;
+  width: 32rem;
+  height: 6rem;
+  line-height: 3rem;
+  border-radius: 3rem;
+  text-align: center;
+  background-color: #27253c;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.7);
+  -webkit-animation: ripple 500ms ease-out;
+          animation: ripple 500ms ease-out;
+}
+
+@-webkit-keyframes ripple {
+  from {
+    transform: scale(0);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes ripple {
+  from {
+    transform: scale(0);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
