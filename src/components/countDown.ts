@@ -19,6 +19,7 @@ section {
     color: #ffe96e;
     background-color: #000000;
     text-shadow: 0 0 1rem rgba(255, 233, 110, 0.7);
+    text-align: left;
     border-radius: 2px;
     box-shadow: 0 0 4px 2px rgba(255, 233, 110, 0.7), inset 0 0 4px 2px rgba(255, 233, 110, 0.7);
 }

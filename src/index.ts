@@ -1,8 +1,26 @@
 import { CountDown } from './components/countDown';
-import { createHeader } from './components/header';
+import { createFooter, createHeader } from './components/header';
+import { gameManager } from './models/gameManager';
 
-const root = document.getElementById('root')!;
-const countDown = new CountDown();
+function initialize() {
+    createHeader();
+    createFooter();
 
-createHeader();
-root.appendChild(countDown);
+    const gameScreen = document.querySelector('.gameScreen')!;
+    const codeEditor = document.querySelector('.codeEditor')!;
+
+    const countDown = new CountDown();
+    gameScreen.appendChild(countDown);
+
+    const defaultSetting = {
+        seed: 0,
+        floorCount: 3,
+        elevatorCount: 1,
+        elevatorCapacity: 4,
+        spawnRate: 0,
+    };
+
+    gameManager.createWorld(defaultSetting);
+}
+
+initialize();

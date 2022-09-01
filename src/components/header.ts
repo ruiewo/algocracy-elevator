@@ -1,15 +1,25 @@
 export const createHeader = () => {
-    const root = document.getElementById('root')!;
-    const header = document.createElement('header');
+    const container = document.createElement('div');
+    container.classList.add('container');
+    container.insertAdjacentHTML('beforeend', `<span class="appIcon"></span>`);
+    container.insertAdjacentHTML('beforeend', `<span class="title">Algocracy - Elevator</span>`);
+    container.insertAdjacentHTML('beforeend', `<span class="divider"></span>`);
 
-    header.insertAdjacentHTML('beforeend', `<span class="appIcon"></span>`);
-    header.insertAdjacentHTML('beforeend', `<span class="title">Algocracy - Elevator</span>`);
-    header.insertAdjacentHTML('beforeend', `<span class="divider"></span>`);
+    container.appendChild(createButton({ label: 'Document' }));
+    container.appendChild(createButton({ label: 'Ranking' }));
+    container.appendChild(createButton({ label: 'Wiki' }));
 
-    header.appendChild(createButton({ label: 'Document' }));
-    header.appendChild(createButton({ label: 'Ranking' }));
-    header.appendChild(createButton({ label: 'Wiki' }));
-    root.appendChild(header);
+    const header = document.querySelector('header')!;
+    header.appendChild(container);
+};
+
+export const createFooter = () => {
+    const container = document.createElement('div');
+    container.classList.add('container');
+    container.insertAdjacentHTML('beforeend', `<span>Copyright © Algocracy 2022.</span>`);
+
+    const footer = document.querySelector('footer')!;
+    footer.appendChild(container);
 };
 
 type ButtonOption = {
