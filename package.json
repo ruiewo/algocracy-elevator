@@ -4,6 +4,7 @@
     "description": "Game to create an elevator algorithm.",
     "author": "ruiewo",
     "license": "MIT",
+    "main": "index.js",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/ruiewo/algocracy-elevator.git"
@@ -12,7 +13,8 @@
         "url": "https://github.com/ruiewo/algocracy-elevator/issues"
     },
     "scripts": {
-        "start": "react-scripts start"
+        "build": "webpack",
+        "watch": "webpack --watch"
     },
     "dependencies": {},
     "devDependencies": {
