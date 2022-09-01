@@ -24,19 +24,24 @@ function createButton(option: ButtonOption) {
     button.textContent = option.label;
 
     button.addEventListener('click', e => {
-        const el = e.target as HTMLElement;
+        const el = e.currentTarget as HTMLElement;
         const ripple = document.createElement('span');
         const wh = Math.max(el.clientWidth, el.clientHeight);
         const half = wh / 2;
+
+        const box = el.getBoundingClientRect();
+        const x = e.clientX - box.left;
+        const y = e.clientY - box.top;
+
         // @ts-ignore
-        ripple.style = `width:${wh}px;height:${wh}px;left:${e.layerX - half}px;top:${e.layerY - half}px`;
+        ripple.style = `width:${wh}px;height:${wh}px;left:${x - half}px;top:${y - half}px`;
         ripple.classList.add('ripple');
         el.appendChild(ripple);
 
         ripple.addEventListener('animationend', e => {
             ripple.remove();
         });
-        console.log('a');
+        console.log(el);
     });
 
     return button;
