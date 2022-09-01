@@ -1,29 +1,25 @@
 import { CountDown } from '../components/countDown';
 import { AppEvent } from './events';
-import { gameManager } from './gameManager';
 import { World } from './world';
 import { WorldController } from './worldController';
 
-type SetGameObjects = React.Dispatch<
-    React.SetStateAction<{
-        time: string;
-    }>
->;
-
-type SetGameResult = React.Dispatch<
-    React.SetStateAction<{
-        isPlaying: boolean;
-        time: string;
-        unit: string;
-        unitPerSec: string;
-        waitingTimeAvg: string;
-        waitingTimeMax: string;
-    }>
->;
+type GameObjects = {
+    time: string;
+};
+type GameResult = {
+    isPlaying: boolean;
+    time: string;
+    unit: string;
+    unitPerSec: string;
+    waitingTimeAvg: string;
+    waitingTimeMax: string;
+};
 
 export const gameRenderer = (() => {
-    const screen = document.querySelector('.gameScreen')!;
     const game = document.querySelector('.game')!;
+    const rect = game.getBoundingClientRect();
+    const gameWidth = rect.width;
+
     const result = document.querySelector('.result')!;
     const startButton = result.querySelector('button')!;
 
@@ -36,8 +32,33 @@ export const gameRenderer = (() => {
     const countDown = new CountDown();
     result.appendChild(countDown);
 
+    const floorHight = 60; // px
+    function createFloor(index: number) {
+        return `<div class="floor" style="bottom: ${
+            floorHight * index
+        }px"><span class="label">${index}</span><span class="indicator up active">▲</span><span class="indicator down">▼</span></div>`;
+    }
+
+    const elevatorWidth = 60; // px
+    function createElevator(index: number, padLeft: number) {
+        return `<div class="elevator" style="left: ${
+            padLeft + elevatorWidth * index
+        }px; bottom: 0px"><span class="label">${index}</span><span class="indicator up active">▲</span><span class="indicator down">▼</span></div>`;
+    }
+
     function createWorld(world: World) {
-        // return world;
+        let html = ``;
+        for (let i = 0; i < world.floors.length; i++) {
+            html += createFloor(i);
+        }
+
+        const elevatorCount = world.elevators.length;
+        const padLeft = (gameWidth - elevatorWidth * elevatorCount) / 2;
+        for (let i = 0; i < elevatorCount; i++) {
+            html += createElevator(i, padLeft);
+        }
+
+        game.innerHTML = html;
     }
 
     function update(elapsedTime: number) {

@@ -12,7 +12,7 @@ function initialize() {
     const defaultSetting = {
         seed: 0,
         floorCount: 3,
-        elevatorCount: 1,
+        elevatorCount: 2,
         elevatorCapacity: 4,
         spawnRate: 0,
     };
