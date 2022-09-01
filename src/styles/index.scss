@@ -37,7 +37,6 @@ body {
     width: 1280px;
     inset: 0;
     margin: auto;
-    text-align: center;
 }
 
 footer {
@@ -49,6 +48,7 @@ footer {
     span {
         font-size: 2rem;
     }
+    text-align: center;
 }
 .gameScreen {
     width: 100%;
@@ -58,5 +58,5 @@ footer {
 .codeEditor {
     width: 100%;
     min-height: 15rem;
-    background-color: #27253c;
+    font-size: 1.6rem;
 }

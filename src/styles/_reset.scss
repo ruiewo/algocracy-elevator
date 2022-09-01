@@ -36,7 +36,9 @@ input,
 label {
     border: 0;
     font-weight: normal;
-    font-size: 1rem;
+    // font-size: 1rem;
+    font-size: 100%;
+    font: inherit;
     vertical-align: baseline;
 }
 

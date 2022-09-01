@@ -1,3 +1,5 @@
+import { World } from './world';
+
 type SetGameObjects = React.Dispatch<
     React.SetStateAction<{
         time: string;
@@ -16,8 +18,14 @@ type SetGameResult = React.Dispatch<
 >;
 
 export const gameRenderer = (() => {
+    const screen = document.querySelector('.gameScreen')!;
+
     let setGameObjects: SetGameObjects;
     let setGameResult: SetGameResult;
+
+    function createWorld(world: World) {
+        // return world;
+    }
 
     function update(elapsedTime: number) {
         setGameObjects({
@@ -36,6 +44,7 @@ export const gameRenderer = (() => {
 
     return {
         update,
+        createWorld,
 
         initialize: (_setGameObjects: SetGameObjects, _setGameResult: SetGameResult) => {
             setGameObjects = _setGameObjects;

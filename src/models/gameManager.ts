@@ -31,7 +31,10 @@ export const gameManager = (() => {
     }
 
     function createWorld(option: WorldOption) {
-        return new World(option);
+        const world = new World(option);
+        gameRenderer.createWorld(world);
+
+        return world;
     }
 
     function toggle() {
@@ -39,11 +42,7 @@ export const gameManager = (() => {
     }
 
     return {
-        createWorld: (option: WorldOption) => {
-            const world = new World(option);
-
-            return world;
-        },
+        createWorld,
         initialize: gameRenderer.initialize,
         toggle,
         get worldSetting() {

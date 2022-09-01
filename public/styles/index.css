@@ -36,7 +36,8 @@ input,
 label {
   border: 0;
   font-weight: normal;
-  font-size: 1rem;
+  font-size: 100%;
+  font: inherit;
   vertical-align: baseline;
 }
 
@@ -176,7 +177,6 @@ body {
   width: 1280px;
   inset: 0;
   margin: auto;
-  text-align: center;
 }
 
 footer {
@@ -187,6 +187,7 @@ footer {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+  text-align: center;
 }
 footer span {
   font-size: 2rem;
@@ -200,5 +201,5 @@ footer span {
 .codeEditor {
   width: 100%;
   min-height: 15rem;
-  background-color: #27253c;
+  font-size: 1.6rem;
 }
