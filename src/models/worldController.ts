@@ -2,13 +2,15 @@ import { Elevator } from './elevator';
 import { Floor } from './floor';
 import { World } from './world';
 import { gameRenderer } from './gameRenderer';
+import { EventHandler } from './eventHandler';
+import { AppEvent } from './events';
 
 type UserCode = {
     initialize: (elevators: Elevator[], floors: Floor[]) => void;
     update: (dt: number, elevators: Elevator[], floors: Floor[]) => void;
 };
 
-export class WorldController {
+export class WorldController extends EventHandler {
     private frame = 60;
     private frameSec = 1 / this.frame;
     private timeScale = 1.0;
@@ -68,12 +70,12 @@ export class WorldController {
 
     public changePlayingState = (isPlaying: boolean) => {
         this.isPlaying = isPlaying;
-        // controller.trigger('timescale_changed');
+        this.trigger(AppEvent.playStateChanged, isPlaying);
     };
 
     public togglePlayingState = () => {
         this.isPlaying = !this.isPlaying;
-        // controller.trigger('timescale_changed');
+        this.trigger(AppEvent.playStateChanged, this.isPlaying);
     };
 
     public changeTimeScale = (timeScale: number) => {

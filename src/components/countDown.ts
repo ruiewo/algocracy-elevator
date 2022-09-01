@@ -62,11 +62,18 @@ span {
 const template = `<style>${css}</style>${html}`;
 
 export class CountDown extends HTMLElement {
+    private time: HTMLElement;
+
     constructor() {
         super();
 
         this.attachShadow({ mode: 'open' });
         this.shadowRoot!.innerHTML = template;
+        this.time = this.shadowRoot!.querySelector<HTMLElement>('.time')!;
+    }
+
+    public update(time: string) {
+        this.time.textContent = time;
     }
 }
 

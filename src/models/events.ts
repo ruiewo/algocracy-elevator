@@ -1,5 +1,6 @@
 export const AppEvent = {
     floorStateChanged: 'floorStateChanged',
+    playStateChanged: 'playStateChanged',
 } as const;
 
 export const triggerEvent = (event: string, element: HTMLElement) => {

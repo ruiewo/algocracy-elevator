@@ -38,7 +38,7 @@ export class EventHandler {
             return;
         }
 
-        listener.callbacks.forEach(callback => callback(params));
+        listener.callbacks.forEach(callback => callback(...params));
     }
 
     private getListener(event: string): EventListener | undefined {

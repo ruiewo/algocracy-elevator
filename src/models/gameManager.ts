@@ -8,6 +8,11 @@ export const gameManager = (() => {
     const worldController = new WorldController();
     let world: World;
 
+    const startButton = document.querySelector('.startButton') as HTMLElement;
+    startButton.onclick = worldController.togglePlayingState;
+
+    gameRenderer.initialize(worldController);
+
     run();
 
     function run() {
@@ -43,7 +48,6 @@ export const gameManager = (() => {
 
     return {
         createWorld,
-        initialize: gameRenderer.initialize,
         toggle,
         get worldSetting() {
             return world.setting;
