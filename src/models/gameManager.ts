@@ -1,6 +1,7 @@
 import { Elevator } from './elevator';
 import { Floor } from './floor';
 import { gameRenderer } from './gameRenderer';
+import { resultBoard } from './resultBoard';
 import { World, WorldOption } from './world';
 import { WorldController } from './worldController';
 
@@ -11,7 +12,7 @@ export const gameManager = (() => {
     const startButton = document.querySelector('.startButton') as HTMLElement;
     startButton.onclick = worldController.togglePlayingState;
 
-    gameRenderer.initialize(worldController);
+    resultBoard.initialize(worldController);
 
     run();
 
