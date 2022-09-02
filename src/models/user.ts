@@ -7,7 +7,13 @@ export class User extends EventHandler {
     private floorIndex = 0;
     private destinationFloorIndex = 0;
     private done = false;
-    private removeMe = false;
+    public removeMe = false;
+    public isMoving = false;
+
+    // for rendering
+    private velocity = 1;
+    public currentX = 0;
+    public elevatorIndex: number | null = null;
 
     public dom: HTMLElement;
 
@@ -24,9 +30,26 @@ export class User extends EventHandler {
     }
 
     public update = (deltaTime: number) => {
+        if (!this.isMoving) {
+            return;
+        }
+
         // calc position
-        // arrived
-        // render
+        this.currentX += this.velocity * deltaTime;
+
+        if (this.elevatorIndex) {
+            // go to elevator
+            if (Math.abs(1 - this.currentX) < 0.01) {
+                this.isMoving = false;
+                this.currentX = 1;
+            }
+        } else {
+            // exit elevator
+            if (this.currentX >= 2) {
+                this.isMoving = false;
+                this.removeMe = true;
+            }
+        }
     };
 
     private pressFloorButton = (floor: Floor) => {
@@ -37,14 +60,22 @@ export class User extends EventHandler {
         }
     };
 
-    private enterIfPossible = () => {
-        //
+    private enterIfPossible = (elevator: Elevator) => {
+        const isGoingUp = this.floorIndex < this.destinationFloorIndex;
+        if (elevator.isGoingUp() !== isGoingUp) {
+            return;
+        }
+
+        this.isMoving = true;
+        this.elevatorIndex = elevator.index;
     };
 
     private exitIfNeeded = (floorIndex: number, elevator: Elevator) => {
         if (floorIndex !== this.destinationFloorIndex) {
             return;
         }
+
+        this.isMoving = true;
     };
 
     static moveTo = () => {

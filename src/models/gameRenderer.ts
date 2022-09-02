@@ -39,10 +39,10 @@ export const gameRenderer = (() => {
         });
     }
 
-    function updateUser(users: User[], elevator: Elevator) {
-        const worldY = elevator.currentY * floorHight;
-        const dom = elevators[elevator.index];
-        dom.style.bottom = worldY + 'px';
+    function updateUser(user: User) {
+        // const worldX = user.currentX * floorHight;
+        // const dom = elevators[user.index];
+        // dom.style.bottom = worldX + 'px';
     }
 
     function spawnUser(floorIndex: number) {
@@ -54,6 +54,7 @@ export const gameRenderer = (() => {
     return {
         createWorld,
         updateElevator,
+        updateUser,
         spawnUser,
     };
 })();

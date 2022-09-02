@@ -57,6 +57,13 @@ export class World {
         this.elevators.forEach(x => x.update(deltaTime));
         this.users.forEach(x => x.update(deltaTime));
 
+        for (let i = this.users.length - 1; i >= 0; i--) {
+            const user = this.users[i];
+            if (user.removeMe) {
+                this.users.splice(i, 1);
+            }
+        }
+
         this.elapsedSinceSpawn += deltaTime;
         if (this.elapsedSinceSpawn > this.spawnInterval) {
             this.elapsedSinceSpawn -= this.spawnInterval;
@@ -84,6 +91,7 @@ export class World {
         const spawnFloorIndex = this.random.nextInt(0, this.worldSetting.floorCount - 1);
         const destinationFloor =
             (spawnFloorIndex + this.random.nextInt(1, this.worldSetting.floorCount - 1)) % this.worldSetting.floorCount;
-        new User(this.floors[spawnFloorIndex], destinationFloor);
+
+        this.users.push(new User(this.floors[spawnFloorIndex], destinationFloor));
     };
 }

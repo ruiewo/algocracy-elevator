@@ -50,6 +50,10 @@ export class Elevator extends EventHandler {
         }
     };
 
+    public isGoingUp() {
+        return this.velocity > 0;
+    }
+
     private getTargetFloors = () => {
         const floors: number[] = [];
         this.buttonState.forEach((state, i) => {

@@ -57,6 +57,7 @@ export class WorldController extends EventHandler {
                 // todo render elevator and user.
 
                 world.elevators.forEach(gameRenderer.updateElevator);
+                world.users.forEach(gameRenderer.updateUser);
                 // world.users.forEach(x => x.update(deltaTime));
 
                 resultBoard.update({ elapsedTime: world.elapsedTime });
