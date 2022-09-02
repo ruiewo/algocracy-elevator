@@ -1,12 +1,15 @@
 import { Elevator } from './elevator';
 import { EventHandler } from './eventHandler';
 import { Floor } from './floor';
+import { gameRenderer } from './gameRenderer';
 
 export class User extends EventHandler {
     private floorIndex = 0;
     private destinationFloorIndex = 0;
     private done = false;
     private removeMe = false;
+
+    public dom: HTMLElement;
 
     constructor(floor: Floor, destinationFloorIndex: number) {
         super();
@@ -15,6 +18,7 @@ export class User extends EventHandler {
         this.destinationFloorIndex = destinationFloorIndex;
 
         // todo render on floor!!
+        this.dom = gameRenderer.spawnUser(this.floorIndex);
 
         this.pressFloorButton(floor);
     }

@@ -14,13 +14,11 @@ export const gameManager = (() => {
 
     resultBoard.initialize(worldController);
 
-    run();
-
     function run() {
         world = createWorld({
             seed: 0,
             floorCount: 3,
-            elevatorCount: 1,
+            elevatorCount: 2,
             elevatorCapacity: 4,
             spawnRate: 0,
         });
@@ -49,6 +47,7 @@ export const gameManager = (() => {
 
     return {
         createWorld,
+        run,
         toggle,
         get worldSetting() {
             return world.setting;

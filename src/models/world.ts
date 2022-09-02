@@ -67,6 +67,9 @@ export class World {
 
     update = (deltaTime: number) => {
         this.elapsedTime += deltaTime;
+
+        this.elevators.forEach(x => x.update(deltaTime));
+        this.users.forEach(x => x.update(deltaTime));
     };
 
     get setting() {

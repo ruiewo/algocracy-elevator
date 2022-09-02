@@ -1,20 +1,20 @@
 import { EventHandler } from './eventHandler';
-import { AppEvent } from './events';
 import { User } from './user';
 
 export class Elevator extends EventHandler {
-    private index = 0;
+    public index = 0;
     private floorCount = 0;
     private capacity = 4;
     private currentFloor = 0;
     private destinationFloor = 0;
     private buttonState: boolean[];
-    private isMoving = false;
-    private userSlot: User[] = [];
+    // private isMoving = false;
+    private isMoving = true;
+    public users: User[] = [];
 
     // for rendering
     private velocity = 1;
-    private currentY = 0;
+    public currentY = 0;
 
     private state = {
         up: false,
@@ -30,19 +30,24 @@ export class Elevator extends EventHandler {
     }
 
     public update = (deltaTime: number) => {
+        if (!this.isMoving) {
+            return;
+        }
+
         // calc position
         this.currentY += this.velocity * deltaTime;
 
-        // arrived
-        if (this.isMoving && Math.abs(this.destinationFloor - this.currentY) < 0.01) {
+        // upper limit or arrived
+        if (this.currentY > this.floorCount - 1 || Math.abs(this.destinationFloor - this.currentY) < 0.01) {
+            this.currentFloor = this.destinationFloor;
             this.currentY = this.destinationFloor; // snap to floor
             this.velocity = 0;
             this.isMoving = false;
-            this.trigger('arrived', this, this.destinationFloor);
-        }
 
-        // render
-        // move elevator & users in elevator
+            this.trigger('arrived', this, this.destinationFloor);
+
+            this.goTo(this.getNextDestinationFloor());
+        }
     };
 
     private getTargetFloors = () => {
@@ -56,20 +61,39 @@ export class Elevator extends EventHandler {
         return floors;
     };
 
+    private getNextDestinationFloor() {
+        // todo replace
+        // just move one stairs.
+        return (this.currentFloor + 1) % this.floorCount;
+    }
+
+    private calcVelocity(isUpward: boolean) {
+        return isUpward ? 1 : -1;
+    }
+
     private goTo = (floorIndex: number) => {
+        this.destinationFloor = floorIndex;
         this.isMoving = true;
+
+        if (floorIndex === this.currentFloor) {
+            this.isMoving = false;
+            this.velocity = 0;
+        } else {
+            const isUpward = floorIndex > this.currentFloor;
+            this.velocity = this.calcVelocity(isUpward);
+        }
     };
 
     private loadUser = (user: User) => {
-        if (this.userSlot.length === this.capacity) {
+        if (this.users.length === this.capacity) {
             return false;
         }
 
-        this.userSlot.push(user);
+        this.users.push(user);
         return true;
     };
 
     private unloadUser = (user: User) => {
-        this.userSlot = this.userSlot.filter(x => x !== user);
+        this.users = this.users.filter(x => x !== user);
     };
 }

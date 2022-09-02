@@ -4,6 +4,7 @@ import { World } from './world';
 import { EventHandler } from './eventHandler';
 import { AppEvent } from './events';
 import { resultBoard } from './resultBoard';
+import { gameRenderer } from './gameRenderer';
 
 type UserCode = {
     initialize: (elevators: Elevator[], floors: Floor[]) => void;
@@ -53,8 +54,10 @@ export class WorldController extends EventHandler {
                     scaledDt -= this.frameSec;
                 }
 
-                world.elevators.forEach(x => x.update(scaledDt));
-                world.users.forEach(x => x.update(scaledDt));
+                // todo render elevator and user.
+
+                world.elevators.forEach(gameRenderer.updateElevator);
+                // world.users.forEach(x => x.update(deltaTime));
 
                 resultBoard.update({ elapsedTime: world.elapsedTime });
                 // world.trigger('stats_display_changed'); // TODO: Trigger less often for performance reasons etc
