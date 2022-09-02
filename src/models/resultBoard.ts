@@ -62,6 +62,9 @@ function convertTime(timeSec: number) {
 
 function convertTime2(timeSec: number) {
     timeSec = 60 - timeSec;
+    if (timeSec < 0) {
+        timeSec += 60 * 99 + 60;
+    }
 
     const min = Math.floor(timeSec / 60)
         .toString()

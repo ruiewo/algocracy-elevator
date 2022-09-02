@@ -20,7 +20,7 @@ export const gameManager = (() => {
             floorCount: 3,
             elevatorCount: 2,
             elevatorCapacity: 4,
-            spawnRate: 0,
+            spawnRate: 1,
         });
 
         worldController.start(
@@ -49,8 +49,5 @@ export const gameManager = (() => {
         createWorld,
         run,
         toggle,
-        get worldSetting() {
-            return world.setting;
-        },
     };
 })();

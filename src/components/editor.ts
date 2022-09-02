@@ -11,7 +11,7 @@ export const createEditor = () => {
     floorCount: 3,
     elevatorCount: 1,
     elevatorCapacity: 4,
-    spawnRate: 0,
+    spawnRate: 1,
 };
 
 gameManager.createWorld(defaultSetting);

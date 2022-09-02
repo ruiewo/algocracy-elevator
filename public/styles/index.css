@@ -244,6 +244,16 @@ footer span {
   color: #2c2;
 }
 
+.user {
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
+  background-image: url("./images/user.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 .startButton {
   color: var(--main-color);
   background-color: #839496;

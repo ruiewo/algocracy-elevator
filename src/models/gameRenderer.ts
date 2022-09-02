@@ -74,6 +74,7 @@ function createUser(floorIndex: number) {
     const user = document.createElement('div');
     user.classList.add('user');
     user.style.bottom = `${floorHight * floorIndex}px`;
+    user.style.left = `100px`;
 
     return user;
 }

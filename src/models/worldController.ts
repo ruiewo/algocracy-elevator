@@ -25,7 +25,7 @@ export class WorldController extends EventHandler {
 
         // world.on('usercode_error', controller.handleUserCodeError);
 
-        let updater = (time: number) => {
+        const updater = (time: number) => {
             if (this.isPlaying && !world.isEnded && lastUpdatedTime !== null) {
                 if (firstUpdate) {
                     firstUpdate = false;
