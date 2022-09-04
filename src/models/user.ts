@@ -37,7 +37,7 @@ export class User extends EventHandler {
         // calc position
         this.currentX += this.velocity * deltaTime;
 
-        if (this.elevatorIndex) {
+        if (this.elevatorIndex !== null) {
             // go to elevator
             if (Math.abs(1 - this.currentX) < 0.01) {
                 this.isMoving = false;

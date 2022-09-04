@@ -4,6 +4,7 @@ import { World } from './world';
 
 const floorHight = 60; // px
 const elevatorWidth = 60; // px
+const userOffsetLeft = 100; // px
 
 let elevators: HTMLElement[] = [];
 
@@ -11,6 +12,7 @@ export const gameRenderer = (() => {
     const game = document.querySelector('.game')!;
     const rect = game.getBoundingClientRect();
     const gameWidth = rect.width;
+    let elevatorOffsetLeft = 0;
 
     function createWorld(world: World) {
         let html = ``;
@@ -20,9 +22,9 @@ export const gameRenderer = (() => {
 
         const elevatorCount = world.elevators.length;
 
-        const offsetLeft = (gameWidth - elevatorWidth * elevatorCount) / 2;
+        elevatorOffsetLeft = (gameWidth - elevatorWidth * elevatorCount) / 2;
         for (let i = 0; i < elevatorCount; i++) {
-            html += createElevator(i, offsetLeft);
+            html += createElevator(i, elevatorOffsetLeft);
         }
 
         game.innerHTML = html;
@@ -40,9 +42,16 @@ export const gameRenderer = (() => {
     }
 
     function updateUser(user: User) {
-        // const worldX = user.currentX * floorHight;
-        // const dom = elevators[user.index];
-        // dom.style.bottom = worldX + 'px';
+        if (!user.isMoving) {
+            return;
+        }
+        if (user.elevatorIndex !== null) {
+            const targetX = elevatorOffsetLeft + elevatorWidth * user.elevatorIndex;
+            const worldX = (targetX - userOffsetLeft) * user.currentX;
+            user.dom.style.left = worldX + 'px';
+        } else {
+            //
+        }
     }
 
     function spawnUser(floorIndex: number) {
@@ -75,7 +84,7 @@ function createUser(floorIndex: number) {
     const user = document.createElement('div');
     user.classList.add('user');
     user.style.bottom = `${floorHight * floorIndex}px`;
-    user.style.left = `100px`;
+    user.style.left = `${userOffsetLeft}px`;
 
     return user;
 }
