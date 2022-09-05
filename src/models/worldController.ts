@@ -23,6 +23,9 @@ export class WorldController extends EventHandler {
         let lastUpdatedTime: number | null = null;
         let firstUpdate = true;
 
+        // todo remove
+        world.elevators.forEach(x => x.goTo(1));
+
         // world.on('usercode_error', controller.handleUserCodeError);
 
         const updater = (time: number) => {

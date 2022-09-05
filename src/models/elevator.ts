@@ -12,6 +12,11 @@ export class Elevator extends EventHandler {
     private isMoving = true;
     public users: User[] = [];
 
+    // waiting on floor
+    private isWaiting = false;
+    private waitingTime = 1; //msec
+    private currentWaitingTime = 0; //msec
+
     // for rendering
     private velocity = 1;
     public currentY = 0;
@@ -30,6 +35,10 @@ export class Elevator extends EventHandler {
     }
 
     public update = (deltaTime: number) => {
+        if (this.checkWaiting(deltaTime)) {
+            return;
+        }
+
         if (!this.isMoving) {
             return;
         }
@@ -46,9 +55,28 @@ export class Elevator extends EventHandler {
 
             this.trigger('arrived', this, this.destinationFloor);
 
-            this.goTo(this.getNextDestinationFloor());
+            this.startWaiting();
         }
     };
+
+    private startWaiting() {
+        this.isWaiting = true;
+    }
+
+    private checkWaiting(deltaTime: number) {
+        if (!this.isWaiting) {
+            return false;
+        }
+
+        this.currentWaitingTime += deltaTime;
+        if (this.currentWaitingTime > this.waitingTime) {
+            this.currentWaitingTime = 0;
+            this.isWaiting = false;
+            this.goTo(this.getNextDestinationFloor());
+        }
+
+        return true;
+    }
 
     public isGoingUp() {
         return this.velocity > 0;
@@ -75,7 +103,8 @@ export class Elevator extends EventHandler {
         return isUpward ? 1 : -1;
     }
 
-    private goTo = (floorIndex: number) => {
+    // todo be private
+    public goTo = (floorIndex: number) => {
         this.destinationFloor = floorIndex;
         this.isMoving = true;
 
