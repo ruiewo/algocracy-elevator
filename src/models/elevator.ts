@@ -53,7 +53,7 @@ export class Elevator extends EventHandler {
             this.velocity = 0;
             this.isMoving = false;
 
-            this.trigger('arrived', this, this.destinationFloor);
+            this.trigger('arrived', this, this.currentFloor);
 
             this.startWaiting();
         }
@@ -117,7 +117,7 @@ export class Elevator extends EventHandler {
         }
     };
 
-    private loadUser = (user: User) => {
+    public loadUser = (user: User) => {
         if (this.users.length === this.capacity) {
             return false;
         }
@@ -126,7 +126,7 @@ export class Elevator extends EventHandler {
         return true;
     };
 
-    private unloadUser = (user: User) => {
+    public unloadUser = (user: User) => {
         this.users = this.users.filter(x => x !== user);
     };
 }

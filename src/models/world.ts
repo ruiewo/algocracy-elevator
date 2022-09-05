@@ -48,6 +48,20 @@ export class World {
             spawnRate: option.spawnRate,
         };
 
+        for (const elevator of this.elevators) {
+            elevator.on('arrived', (_: Elevator, floorIndex: number) => {
+                // exit user
+                elevator.users.forEach(user => {
+                    user.exitIfNeeded(elevator, floorIndex);
+                });
+
+                // enter user
+                this.users.forEach(user => {
+                    user.enterIfPossible(elevator, floorIndex);
+                });
+            });
+        }
+
         this.spawnInterval = 1 / option.spawnRate;
     }
 
@@ -61,6 +75,7 @@ export class World {
             const user = this.users[i];
             if (user.removeMe) {
                 this.users.splice(i, 1);
+                user.dom.remove();
             }
         }
 

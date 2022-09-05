@@ -24,7 +24,7 @@ export class WorldController extends EventHandler {
         let firstUpdate = true;
 
         // todo remove
-        world.elevators.forEach(x => x.goTo(1));
+        world.elevators.forEach((x, i) => x.goTo(i + 1));
 
         // world.on('usercode_error', controller.handleUserCodeError);
 

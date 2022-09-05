@@ -45,13 +45,20 @@ export const gameRenderer = (() => {
         if (!user.isMoving) {
             return;
         }
-        if (user.elevatorIndex !== null) {
-            const targetX = elevatorOffsetLeft + elevatorWidth * user.elevatorIndex;
-            const worldX = (targetX - userOffsetLeft) * user.currentX;
-            user.dom.style.left = worldX + 'px';
-        } else {
-            //
-        }
+
+        const targetX = elevatorOffsetLeft + elevatorWidth * user.elevatorIndex;
+        const worldX = (targetX - userOffsetLeft) * user.currentX + userOffsetLeft;
+        user.dom.style.left = worldX + 'px';
+    }
+
+    function stickTo(user: User) {
+        // console.log(`entered on elevator ${user.elevatorIndex}`);
+
+        const targetX = elevatorOffsetLeft + elevatorWidth * user.elevatorIndex;
+        const worldX = (targetX - userOffsetLeft) * user.currentX + userOffsetLeft;
+        user.dom.style.left = worldX + 'px';
+
+        console.log(targetX);
     }
 
     function spawnUser(floorIndex: number) {
@@ -64,6 +71,7 @@ export const gameRenderer = (() => {
         createWorld,
         updateElevator,
         updateUser,
+        stickTo,
         spawnUser,
     };
 })();

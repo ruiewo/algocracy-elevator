@@ -4,8 +4,8 @@ import { Floor } from './floor';
 import { gameRenderer } from './gameRenderer';
 
 export class User extends EventHandler {
-    private floorIndex = 0;
-    private destinationFloorIndex = 0;
+    public floorIndex = 0;
+    public destinationFloorIndex = 0;
     private done = false;
     public removeMe = false;
     public isMoving = false;
@@ -13,7 +13,7 @@ export class User extends EventHandler {
     // for rendering
     private velocity = 1;
     public currentX = 0;
-    public elevatorIndex: number | null = null;
+    public elevatorIndex = -1;
 
     public dom: HTMLElement;
 
@@ -37,18 +37,19 @@ export class User extends EventHandler {
         // calc position
         this.currentX += this.velocity * deltaTime;
 
-        if (this.elevatorIndex !== null) {
-            // go to elevator
-            if (Math.abs(1 - this.currentX) < 0.01) {
-                this.isMoving = false;
-                this.currentX = 1;
-            }
-        } else {
-            // exit elevator
-            if (this.currentX >= 2) {
-                this.isMoving = false;
-                this.removeMe = true;
-            }
+        // exit elevator
+        if (this.currentX >= 2) {
+            this.isMoving = false;
+            this.removeMe = true;
+            return;
+        }
+
+        // go to elevator
+        if (Math.abs(1 - this.currentX) < 0.01) {
+            this.isMoving = false;
+            this.currentX = 1;
+
+            gameRenderer.stickTo(this);
         }
     };
 
@@ -60,9 +61,24 @@ export class User extends EventHandler {
         }
     };
 
-    private enterIfPossible = (elevator: Elevator) => {
+    public enterIfPossible = (elevator: Elevator, floorIndex: number) => {
+        if (this.elevatorIndex != -1) {
+            // has already on elevator.
+            return;
+        }
+
+        if (this.floorIndex !== floorIndex) {
+            return;
+        }
+
+        // check if same direction.
         const isGoingUp = this.floorIndex < this.destinationFloorIndex;
         if (elevator.isGoingUp() !== isGoingUp) {
+            return;
+        }
+
+        // check if can take elevator.
+        if (!elevator.loadUser(this)) {
             return;
         }
 
@@ -70,15 +86,14 @@ export class User extends EventHandler {
         this.elevatorIndex = elevator.index;
     };
 
-    private exitIfNeeded = (floorIndex: number, elevator: Elevator) => {
+    public exitIfNeeded = (elevator: Elevator, floorIndex: number) => {
         if (floorIndex !== this.destinationFloorIndex) {
             return;
         }
 
+        this.done = true;
         this.isMoving = true;
-    };
 
-    static moveTo = () => {
-        //
+        elevator.unloadUser(this);
     };
 }

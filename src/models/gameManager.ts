@@ -18,7 +18,7 @@ export const gameManager = (() => {
         world = createWorld({
             seed: 0,
             floorCount: 3,
-            elevatorCount: 2,
+            elevatorCount: 3,
             elevatorCapacity: 4,
             spawnRate: 1,
         });
