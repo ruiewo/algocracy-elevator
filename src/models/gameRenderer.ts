@@ -4,15 +4,17 @@ import { World } from './world';
 
 const floorHight = 60; // px
 const elevatorWidth = 60; // px
+const userWidth = 30;
 const userOffsetLeft = 100; // px
 
 let elevators: HTMLElement[] = [];
+
+let elevatorOffsetLeft = 0;
 
 export const gameRenderer = (() => {
     const game = document.querySelector('.game')!;
     const rect = game.getBoundingClientRect();
     const gameWidth = rect.width;
-    let elevatorOffsetLeft = 0;
 
     function createWorld(world: World) {
         let html = ``;
@@ -46,19 +48,22 @@ export const gameRenderer = (() => {
             return;
         }
 
-        const targetX = elevatorOffsetLeft + elevatorWidth * user.elevatorIndex;
-        const worldX = (targetX - userOffsetLeft) * user.currentX + userOffsetLeft;
+        const targetX =
+            elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.position;
+        const startPos = calcStartPosition(user.position);
+        const worldX = (targetX - startPos) * user.currentX + startPos;
         user.dom.style.left = worldX + 'px';
     }
 
     function stickTo(user: User) {
-        const targetX = elevatorOffsetLeft + elevatorWidth * user.elevatorIndex;
+        const targetX =
+            elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.position;
         const worldX = (targetX - userOffsetLeft) * user.currentX + userOffsetLeft;
         user.dom.style.left = worldX + 'px';
     }
 
-    function spawnUser(floorIndex: number) {
-        const user = createUser(floorIndex);
+    function spawnUser(floorIndex: number, position: number) {
+        const user = createUser(floorIndex, position);
         game.appendChild(user);
         return user;
     }
@@ -84,11 +89,15 @@ function createElevator(index: number, offsetLeft: number) {
     }px; bottom: 0px"><span class="label">${index}</span><span class="indicator up active">▲</span><span class="indicator down">▼</span></div>`;
 }
 
-function createUser(floorIndex: number) {
+function createUser(floorIndex: number, position: number) {
     const user = document.createElement('div');
     user.classList.add('user');
     user.style.bottom = `${floorHight * floorIndex}px`;
-    user.style.left = `${userOffsetLeft}px`;
+    user.style.left = `${calcStartPosition(position)}px`;
 
     return user;
+}
+
+function calcStartPosition(position: number) {
+    return (elevatorOffsetLeft - userOffsetLeft - userWidth) * position + userOffsetLeft;
 }

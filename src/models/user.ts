@@ -16,6 +16,7 @@ export class User extends EventHandler {
     public elevatorIndex = -1;
 
     public dom: HTMLElement;
+    public position: number;
 
     constructor(floor: Floor, destinationFloorIndex: number) {
         super();
@@ -23,8 +24,8 @@ export class User extends EventHandler {
         this.floorIndex = floor.index;
         this.destinationFloorIndex = destinationFloorIndex;
 
-        // todo render on floor!!
-        this.dom = gameRenderer.spawnUser(this.floorIndex);
+        this.position = Math.random();
+        this.dom = gameRenderer.spawnUser(this.floorIndex, this.position);
 
         this.pressFloorButton(floor);
     }
