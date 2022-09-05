@@ -29,18 +29,14 @@ export const resultBoard = (() => {
     const countDown = new CountDown();
     result.appendChild(countDown);
 
-    function update({ elapsedTime, unit }: Partial<Result>) {
-        if (elapsedTime != null) {
-            const timeStr = convertTime(elapsedTime);
-            time.textContent = timeStr;
+    function update({ elapsedTime, unit }: Result) {
+        countDown.update(convertTime2(elapsedTime));
 
-            countDown.update(convertTime2(elapsedTime));
-        }
+        const timeStr = convertTime(elapsedTime);
+        time.textContent = timeStr;
 
-        if (unit != null) {
-            score.textContent = unit.toString();
-            unitPerSec.textContent = (unit / elapsedTime!).toFixed(2);
-        }
+        score.textContent = unit.toString();
+        unitPerSec.textContent = (unit / elapsedTime!).toFixed(2);
     }
 
     function initialize(worldController: WorldController) {
