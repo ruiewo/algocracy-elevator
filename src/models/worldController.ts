@@ -17,6 +17,10 @@ export class WorldController extends EventHandler {
     private timeScale = 1.0;
     private isPlaying = false;
 
+    private result = {
+        unit: 0,
+    };
+
     public start = (world: World, userCode: UserCode, requestAnimationFrame: any, autoStart = false) => {
         this.isPlaying = autoStart;
 
@@ -25,6 +29,12 @@ export class WorldController extends EventHandler {
 
         // todo remove
         world.elevators.forEach((x, i) => x.goTo(i + 1));
+
+        world.elevators.forEach(x =>
+            x.on('userExited', () => {
+                this.result.unit++;
+            })
+        );
 
         // world.on('usercode_error', controller.handleUserCodeError);
 
@@ -63,7 +73,7 @@ export class WorldController extends EventHandler {
                 world.users.forEach(gameRenderer.updateUser);
                 // world.users.forEach(x => x.update(deltaTime));
 
-                resultBoard.update({ elapsedTime: world.elapsedTime });
+                resultBoard.update({ elapsedTime: world.elapsedTime, unit: this.result.unit });
                 // world.trigger('stats_display_changed'); // TODO: Trigger less often for performance reasons etc
             }
 

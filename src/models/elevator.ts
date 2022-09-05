@@ -148,5 +148,6 @@ export class Elevator extends EventHandler {
 
     public unloadUser = (user: User) => {
         this.users = this.users.filter(x => x !== user);
+        this.trigger('userExited');
     };
 }

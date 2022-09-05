@@ -13,6 +13,7 @@ type GameResult = {
 
 type Result = {
     elapsedTime: number;
+    unit: number;
 };
 
 export const resultBoard = (() => {
@@ -20,7 +21,7 @@ export const resultBoard = (() => {
     const startButton = result.querySelector('button')!;
 
     const time = result.querySelector<HTMLElement>('[data-tag="time"]')!;
-    const unit = result.querySelector<HTMLElement>('[data-tag="unit"]')!;
+    const score = result.querySelector<HTMLElement>('[data-tag="unit"]')!;
     const unitPerSec = result.querySelector<HTMLElement>('[data-tag="unitPerSec"]')!;
     const waitingAvg = result.querySelector<HTMLElement>('[data-tag="waitingAvg"]')!;
     const waitingMax = result.querySelector<HTMLElement>('[data-tag="waitingMax"]')!;
@@ -28,12 +29,17 @@ export const resultBoard = (() => {
     const countDown = new CountDown();
     result.appendChild(countDown);
 
-    function update({ elapsedTime }: Partial<Result>) {
+    function update({ elapsedTime, unit }: Partial<Result>) {
         if (elapsedTime != null) {
             const timeStr = convertTime(elapsedTime);
             time.textContent = timeStr;
 
             countDown.update(convertTime2(elapsedTime));
+        }
+
+        if (unit != null) {
+            score.textContent = unit.toString();
+            unitPerSec.textContent = (unit / elapsedTime!).toFixed(2);
         }
     }
 
