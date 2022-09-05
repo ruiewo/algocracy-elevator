@@ -15,6 +15,7 @@ export type WorldSetting = {
     floorCount: number;
     elevatorCount: number;
     elevatorCapacity: number;
+    spawnRate: number;
 };
 
 export class World {
@@ -29,6 +30,8 @@ export class World {
     public waitingTimeMax = 0.0;
     public waitingTimeTotal = 0.0;
 
+    public elapsedSinceSpawn = 0;
+    public spawnInterval = 0;
     private worldSetting: WorldSetting;
 
     constructor(option: WorldOption) {
@@ -42,10 +45,33 @@ export class World {
             floorCount: option.floorCount,
             elevatorCount: option.elevatorCount,
             elevatorCapacity: option.elevatorCapacity,
+            spawnRate: option.spawnRate,
         };
+
+        this.spawnInterval = 1 / option.spawnRate;
     }
 
-    createFloor = (count: number) => {
+    update = (deltaTime: number) => {
+        this.elapsedTime += deltaTime;
+
+        this.elevators.forEach(x => x.update(deltaTime));
+        this.users.forEach(x => x.update(deltaTime));
+
+        for (let i = this.users.length - 1; i >= 0; i--) {
+            const user = this.users[i];
+            if (user.removeMe) {
+                this.users.splice(i, 1);
+            }
+        }
+
+        this.elapsedSinceSpawn += deltaTime;
+        if (this.elapsedSinceSpawn > this.spawnInterval) {
+            this.elapsedSinceSpawn -= this.spawnInterval;
+            this.spawnUser();
+        }
+    };
+
+    private createFloor = (count: number) => {
         const floors = [];
         for (let i = 0; i < count; i++) {
             floors.push(new Floor(i));
@@ -53,7 +79,7 @@ export class World {
         return floors;
     };
 
-    createElevator = (count: number, floorCount: number, capacity: number) => {
+    private createElevator = (count: number, floorCount: number, capacity: number) => {
         const elevators = [];
         for (let i = 0; i < count; i++) {
             elevators.push(new Elevator(i, floorCount, capacity));
@@ -61,15 +87,11 @@ export class World {
         return elevators;
     };
 
-    createUser = (count: number) => {
-        //
-    };
+    private spawnUser = () => {
+        const spawnFloorIndex = this.random.nextInt(0, this.worldSetting.floorCount - 1);
+        const destinationFloor =
+            (spawnFloorIndex + this.random.nextInt(1, this.worldSetting.floorCount - 1)) % this.worldSetting.floorCount;
 
-    update = (deltaTime: number) => {
-        this.elapsedTime += deltaTime;
+        this.users.push(new User(this.floors[spawnFloorIndex], destinationFloor));
     };
-
-    get setting() {
-        return this.worldSetting;
-    }
 }

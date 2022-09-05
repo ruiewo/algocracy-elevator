@@ -1,6 +1,7 @@
 import { Elevator } from './elevator';
 import { Floor } from './floor';
 import { gameRenderer } from './gameRenderer';
+import { resultBoard } from './resultBoard';
 import { World, WorldOption } from './world';
 import { WorldController } from './worldController';
 
@@ -8,15 +9,18 @@ export const gameManager = (() => {
     const worldController = new WorldController();
     let world: World;
 
-    run();
+    const startButton = document.querySelector('.startButton') as HTMLElement;
+    startButton.onclick = worldController.togglePlayingState;
+
+    resultBoard.initialize(worldController);
 
     function run() {
         world = createWorld({
             seed: 0,
             floorCount: 3,
-            elevatorCount: 1,
+            elevatorCount: 2,
             elevatorCapacity: 4,
-            spawnRate: 0,
+            spawnRate: 1,
         });
 
         worldController.start(
@@ -31,7 +35,10 @@ export const gameManager = (() => {
     }
 
     function createWorld(option: WorldOption) {
-        return new World(option);
+        const world = new World(option);
+        gameRenderer.createWorld(world);
+
+        return world;
     }
 
     function toggle() {
@@ -39,15 +46,8 @@ export const gameManager = (() => {
     }
 
     return {
-        createWorld: (option: WorldOption) => {
-            const world = new World(option);
-
-            return world;
-        },
-        initialize: gameRenderer.initialize,
+        createWorld,
+        run,
         toggle,
-        get worldSetting() {
-            return world.setting;
-        },
     };
 })();

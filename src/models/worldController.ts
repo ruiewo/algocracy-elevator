@@ -1,6 +1,9 @@
 import { Elevator } from './elevator';
 import { Floor } from './floor';
 import { World } from './world';
+import { EventHandler } from './eventHandler';
+import { AppEvent } from './events';
+import { resultBoard } from './resultBoard';
 import { gameRenderer } from './gameRenderer';
 
 type UserCode = {
@@ -8,7 +11,7 @@ type UserCode = {
     update: (dt: number, elevators: Elevator[], floors: Floor[]) => void;
 };
 
-export class WorldController {
+export class WorldController extends EventHandler {
     private frame = 60;
     private frameSec = 1 / this.frame;
     private timeScale = 1.0;
@@ -20,9 +23,12 @@ export class WorldController {
         let lastUpdatedTime: number | null = null;
         let firstUpdate = true;
 
+        // todo remove
+        world.elevators.forEach(x => x.goTo(1));
+
         // world.on('usercode_error', controller.handleUserCodeError);
 
-        let updater = (time: number) => {
+        const updater = (time: number) => {
             if (this.isPlaying && !world.isEnded && lastUpdatedTime !== null) {
                 if (firstUpdate) {
                     firstUpdate = false;
@@ -51,8 +57,13 @@ export class WorldController {
                     scaledDt -= this.frameSec;
                 }
 
-                gameRenderer.update(world.elapsedTime);
-                // world.updateDisplayPositions();
+                // todo render elevator and user.
+
+                world.elevators.forEach(gameRenderer.updateElevator);
+                world.users.forEach(gameRenderer.updateUser);
+                // world.users.forEach(x => x.update(deltaTime));
+
+                resultBoard.update({ elapsedTime: world.elapsedTime });
                 // world.trigger('stats_display_changed'); // TODO: Trigger less often for performance reasons etc
             }
 
@@ -68,12 +79,12 @@ export class WorldController {
 
     public changePlayingState = (isPlaying: boolean) => {
         this.isPlaying = isPlaying;
-        // controller.trigger('timescale_changed');
+        this.trigger(AppEvent.playStateChanged, isPlaying);
     };
 
     public togglePlayingState = () => {
         this.isPlaying = !this.isPlaying;
-        // controller.trigger('timescale_changed');
+        this.trigger(AppEvent.playStateChanged, this.isPlaying);
     };
 
     public changeTimeScale = (timeScale: number) => {

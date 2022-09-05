@@ -1,0 +1,151 @@
+@use './_reset';
+@use './_header';
+
+html {
+    font-size: 10px;
+    font-family: 'Noto Serif JP', serif;
+}
+button {
+    font-family: 'Noto Serif JP', serif;
+}
+
+:root {
+    --main-color: snow;
+}
+
+@font-face {
+    font-family: 'DSEG7Classic';
+    src: url('./fonts/DSEG7/Classic-Bold.woff2') format('woff2'), url('../fonts/DSEG7/Classic-Bold.woff') format('woff'),
+        url('./fonts/DSEG7/Classic-Bold.ttf') format('truetype');
+}
+
+@media screen and (max-width: 600px) {
+    /* for smart phone */
+}
+
+@media screen and (max-width: 1024px) {
+    /* for tablet */
+}
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: #282c34;
+}
+
+.container {
+    width: 1280px;
+    inset: 0;
+    margin: auto;
+}
+
+footer {
+    width: 100%;
+    height: 6rem;
+    padding: 2rem;
+    color: var(--main-color);
+    user-select: none;
+    span {
+        font-size: 2rem;
+    }
+    text-align: center;
+}
+.gameScreen {
+    width: 100%;
+    height: 50rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.game {
+    position: relative;
+    width: 900px;
+    height: inherit;
+    user-select: none;
+}
+.floor {
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    color: var(--main-color);
+    border-bottom: 1px solid gray;
+    font-size: 2rem;
+
+    .label {
+        display: inline-block;
+        font-size: 3rem;
+        line-height: 60px;
+        padding: 0 2rem;
+    }
+    .indicator.active {
+        color: #2c2;
+    }
+}
+.elevator {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    color: var(--main-color);
+    border: 1px solid snow;
+    font-size: 1rem;
+
+    .label {
+        display: inline-block;
+        font-size: 1.5rem;
+        // line-height: 20px;
+        padding: 0 1rem;
+    }
+    .indicator.active {
+        color: #2c2;
+    }
+}
+
+.user {
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+
+    background-image: url('./images/user.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.startButton {
+    // todo change
+    color: var(--main-color);
+    background-color: #839496;
+    width: 15rem;
+    font-size: 2rem;
+    border-radius: 1rem;
+}
+
+.result {
+    width: 380px;
+    height: inherit;
+    padding: 1rem 0;
+
+    li {
+        line-height: 4rem;
+    }
+
+    span {
+        display: inline-block;
+        color: var(--main-color);
+        font-size: 2rem;
+    }
+}
+
+.resultLabel {
+    width: 220px;
+    text-align: left;
+}
+.resultValue {
+    width: 160px;
+    text-align: right;
+}
+.codeEditor {
+    width: 100%;
+    min-height: 15rem;
+    font-size: 1.6rem;
+}
