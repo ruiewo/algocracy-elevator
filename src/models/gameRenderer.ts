@@ -52,13 +52,9 @@ export const gameRenderer = (() => {
     }
 
     function stickTo(user: User) {
-        // console.log(`entered on elevator ${user.elevatorIndex}`);
-
         const targetX = elevatorOffsetLeft + elevatorWidth * user.elevatorIndex;
         const worldX = (targetX - userOffsetLeft) * user.currentX + userOffsetLeft;
         user.dom.style.left = worldX + 'px';
-
-        console.log(targetX);
     }
 
     function spawnUser(floorIndex: number) {

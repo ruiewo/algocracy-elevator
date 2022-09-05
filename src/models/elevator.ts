@@ -1,6 +1,8 @@
 import { EventHandler } from './eventHandler';
 import { User } from './user';
 
+export type Motion = 'up' | 'down' | 'stay';
+
 export class Elevator extends EventHandler {
     public index = 0;
     private floorCount = 0;
@@ -21,9 +23,14 @@ export class Elevator extends EventHandler {
     private velocity = 1;
     public currentY = 0;
 
-    private state = {
+    private state: {
+        up: boolean;
+        down: boolean;
+        motion: Motion;
+    } = {
         up: false,
         down: false,
+        motion: 'up',
     };
 
     constructor(index: number, floorCount: number, capacity: number) {
@@ -53,6 +60,11 @@ export class Elevator extends EventHandler {
             this.velocity = 0;
             this.isMoving = false;
 
+            const nextFloor = this.getNextDestinationFloor();
+            this.state.motion =
+                nextFloor > this.currentFloor ? 'up' : nextFloor === this.currentFloor ? 'stay' : 'down';
+            console.log(this.state.motion);
+
             this.trigger('arrived', this, this.currentFloor);
 
             this.startWaiting();
@@ -79,7 +91,8 @@ export class Elevator extends EventHandler {
     }
 
     public isGoingUp() {
-        return this.velocity > 0;
+        return this.state.motion === 'up';
+        // return this.velocity > 0;
     }
 
     private getTargetFloors = () => {
@@ -96,6 +109,13 @@ export class Elevator extends EventHandler {
     private getNextDestinationFloor() {
         // todo replace
         // just move one stairs.
+
+        // if (this.currentFloor + 1 > this.floorCount) {
+        //     return this.currentFloor - 1;
+        // } else {
+        //     return this.currentFloor + 1;
+        // }
+
         return (this.currentFloor + 1) % this.floorCount;
     }
 
