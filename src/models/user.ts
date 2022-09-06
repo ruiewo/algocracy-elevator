@@ -6,8 +6,8 @@ import { gameRenderer } from './gameRenderer';
 export class User extends EventHandler {
     public floorIndex = 0;
     public destinationFloorIndex = 0;
-    private floor: Floor;
-    private done = false;
+
+    public done = false;
     public removeMe = false;
     public isMoving = false;
 
@@ -19,16 +19,19 @@ export class User extends EventHandler {
     public dom: HTMLElement;
     public position: number;
 
+    private pressFloorButton: () => void;
+
     constructor(floor: Floor, destinationFloorIndex: number) {
         super();
 
         this.floorIndex = floor.index;
         this.destinationFloorIndex = destinationFloorIndex;
-        this.floor = floor;
 
         this.position = Math.random();
         this.dom = gameRenderer.spawnUser(this.floorIndex, this.position);
 
+        this.pressFloorButton =
+            this.destinationFloorIndex > this.floorIndex ? floor.pressUpButton : floor.pressDownButton;
         this.pressFloorButton();
     }
 
@@ -42,32 +45,24 @@ export class User extends EventHandler {
 
         // exit elevator
         if (this.currentX >= 2) {
-            this.isMoving = false;
+            this.setMovingState(false);
             this.removeMe = true;
             return;
         }
 
         // go to elevator
-        if (Math.abs(1 - this.currentX) < 0.01) {
-            this.isMoving = false;
+        if (!this.done && this.currentX > 0.99) {
+            this.setMovingState(false);
             this.currentX = 1;
+            this.done = true;
 
             gameRenderer.stickTo(this);
         }
     };
 
-    private pressFloorButton = () => {
-        if (this.destinationFloorIndex < this.floorIndex) {
-            this.floor.pressDownButton();
-        } else {
-            this.floor.pressUpButton();
-        }
-    };
-
     public enterIfPossible = (elevator: Elevator, floorIndex: number) => {
         if (this.elevatorIndex != -1) {
-            // already on elevator.
-            return;
+            return; // already on elevator.
         }
 
         if (this.floorIndex !== floorIndex) {
@@ -86,10 +81,10 @@ export class User extends EventHandler {
             return;
         }
 
-        this.isMoving = true;
         this.elevatorIndex = elevator.index;
         elevator.pressButton(this.destinationFloorIndex);
-        gameRenderer.toggleUserMoving(this);
+
+        this.setMovingState(true);
     };
 
     public exitIfNeeded = (elevator: Elevator, floorIndex: number) => {
@@ -97,10 +92,16 @@ export class User extends EventHandler {
             return;
         }
 
-        this.done = true;
-        this.isMoving = true;
-
         elevator.unloadUser(this);
-        gameRenderer.toggleUserMoving(this);
+
+        this.setMovingState(true);
+    };
+
+    private setMovingState = (state: boolean) => {
+        if (this.isMoving !== state) {
+            gameRenderer.toggleUserMoving(this);
+        }
+
+        this.isMoving = state;
     };
 }

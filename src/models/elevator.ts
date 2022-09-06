@@ -16,8 +16,8 @@ export class Elevator extends EventHandler {
 
     // waiting on floor
     private isWaiting = false;
-    private waitingTime = 1; //msec
-    private currentWaitingTime = 0; //msec
+    private waitingTime = 1; // sec
+    private currentWaitingTime = 0; // sec
 
     // for rendering
     private velocityMax = 2;
@@ -43,7 +43,8 @@ export class Elevator extends EventHandler {
     }
 
     public update = (deltaTime: number) => {
-        if (this.checkWaiting(deltaTime)) {
+        if (this.isWaiting) {
+            this.waitForTime(deltaTime);
             return;
         }
 
@@ -60,80 +61,18 @@ export class Elevator extends EventHandler {
         }
     };
 
-    public pressButton(floorIndex: number) {
+    public pressButton = (floorIndex: number) => {
         const alreadyPressed = this.buttonState[floorIndex];
         if (alreadyPressed) {
             return;
         }
 
         this.trigger(AppEvent.elevatorButtonPressed, floorIndex);
-    }
-
-    private arrived() {
-        this.currentFloor = this.destinationFloor;
-        this.currentY = this.destinationFloor; // snap to floor
-        this.velocity = 0;
-        this.isMoving = false;
-
-        const nextFloor = this.getNextDestinationFloor();
-        this.state.motion = nextFloor > this.currentFloor ? 'up' : nextFloor === this.currentFloor ? 'stay' : 'down';
-
-        this.trigger(AppEvent.arrived, this, this.currentFloor);
-
-        this.startWaiting();
-    }
-
-    private startWaiting() {
-        this.isWaiting = true;
-    }
-
-    private checkWaiting(deltaTime: number) {
-        if (!this.isWaiting) {
-            return false;
-        }
-
-        this.currentWaitingTime += deltaTime;
-        if (this.currentWaitingTime > this.waitingTime) {
-            this.currentWaitingTime = 0;
-            this.isWaiting = false;
-            this.goTo(this.getNextDestinationFloor());
-        }
-
-        return true;
-    }
-
-    public isGoingUp() {
-        return this.state.motion === 'up';
-        // return this.velocity > 0;
-    }
-
-    private getTargetFloors = () => {
-        const floors: number[] = [];
-        this.buttonState.forEach((state, i) => {
-            if (state) {
-                floors.push(i);
-            }
-        });
-
-        return floors;
     };
 
-    private getNextDestinationFloor() {
-        // todo replace
-        // just move one stairs.
-
-        // if (this.currentFloor + 1 > this.floorCount) {
-        //     return this.currentFloor - 1;
-        // } else {
-        //     return this.currentFloor + 1;
-        // }
-
-        return (this.currentFloor + 1) % this.floorCount;
-    }
-
-    private calcVelocity(isUpward: boolean) {
-        return isUpward ? this.velocityMax : -this.velocityMax;
-    }
+    public isGoingUp = () => {
+        return this.state.motion === 'up';
+    };
 
     // todo be private
     public goTo = (floorIndex: number) => {
@@ -160,5 +99,40 @@ export class Elevator extends EventHandler {
     public unloadUser = (user: User) => {
         this.users = this.users.filter(x => x !== user);
         this.trigger(AppEvent.userExited, this.currentFloor);
+    };
+
+    private getNextDestinationFloor = () => {
+        // todo replace
+        return (this.currentFloor + 1) % this.floorCount;
+    };
+
+    private calcVelocity = (isUpward: boolean) => {
+        return isUpward ? this.velocityMax : -this.velocityMax;
+    };
+
+    private arrived = () => {
+        this.currentFloor = this.destinationFloor;
+        this.currentY = this.destinationFloor; // snap to floor
+        this.startWaiting();
+
+        const nextFloor = this.getNextDestinationFloor();
+        this.state.motion = nextFloor > this.currentFloor ? 'up' : nextFloor === this.currentFloor ? 'stay' : 'down';
+
+        this.trigger(AppEvent.arrived, this, this.currentFloor);
+    };
+
+    private startWaiting = () => {
+        this.velocity = 0;
+        this.isMoving = false;
+        this.isWaiting = true;
+        this.currentWaitingTime = 0;
+    };
+
+    private waitForTime = (deltaTime: number) => {
+        this.currentWaitingTime += deltaTime;
+        if (this.currentWaitingTime > this.waitingTime) {
+            this.isWaiting = false;
+            this.goTo(this.getNextDestinationFloor());
+        }
     };
 }

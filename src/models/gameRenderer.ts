@@ -64,8 +64,6 @@ export const gameRenderer = (() => {
             elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.position;
         const worldX = (targetX - userOffsetLeft) * user.currentX + userOffsetLeft;
         user.dom.style.left = worldX + 'px';
-
-        toggleUserMoving(user);
     }
 
     function toggleUserMoving(user: User) {

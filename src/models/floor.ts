@@ -19,27 +19,27 @@ export class Floor extends EventHandler {
         this.index = index;
     }
 
-    pressUpButton() {
+    pressUpButton = () => {
         if (this.state.up === true) {
             return; // do nothing
         }
 
         this.state.up = true;
         this.trigger(AppEvent.floorStateChanged, this.state);
-    }
+    };
 
-    pressDownButton() {
+    pressDownButton = () => {
         if (this.state.down === true) {
             return; // do nothing
         }
 
         this.state.down = true;
         this.trigger(AppEvent.floorStateChanged, this.state);
-    }
+    };
 
-    clearState() {
+    clearState = () => {
         this.state.up = false;
         this.state.down = false;
         this.trigger(AppEvent.floorStateChanged, this.state);
-    }
+    };
 }

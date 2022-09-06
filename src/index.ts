@@ -1,5 +1,5 @@
 import { createEditor } from './components/editor';
-import { createFooter, createHeader } from './components/header';
+import { createFooter, createHeader } from './components/domHelper';
 import { gameManager } from './models/gameManager';
 
 function initialize() {
