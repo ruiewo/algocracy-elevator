@@ -48,10 +48,6 @@ export const gameRenderer = (() => {
     }
 
     function updateUser(user: User) {
-        if (!user.isMoving) {
-            return;
-        }
-
         const targetX =
             elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.position;
         const startPos = calcStartPosition(user.position);

@@ -4,12 +4,12 @@ import { Floor } from './floor';
 import { gameRenderer } from './gameRenderer';
 
 export class User extends EventHandler {
-    public floorIndex = 0;
-    public destinationFloorIndex = 0;
+    private floorIndex = 0;
+    private destinationFloorIndex = 0;
 
-    public done = false;
+    private isMoving = false;
+    private done = false;
     public removeMe = false;
-    public isMoving = false;
 
     // for rendering
     private velocity = 1;
