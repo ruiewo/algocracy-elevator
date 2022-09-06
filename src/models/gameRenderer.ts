@@ -64,6 +64,12 @@ export const gameRenderer = (() => {
             elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.position;
         const worldX = (targetX - userOffsetLeft) * user.currentX + userOffsetLeft;
         user.dom.style.left = worldX + 'px';
+
+        toggleUserMoving(user);
+    }
+
+    function toggleUserMoving(user: User) {
+        user.dom.classList.toggle('moving');
     }
 
     function spawnUser(floorIndex: number, position: number) {
@@ -101,6 +107,7 @@ export const gameRenderer = (() => {
         updateElevator,
         updateUser,
         stickTo,
+        toggleUserMoving,
         spawnUser,
         updateFloorButton,
         updateElevatorButton,

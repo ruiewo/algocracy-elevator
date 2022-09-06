@@ -75,10 +75,10 @@ export class User extends EventHandler {
         }
 
         // check if same direction.
-        if (elevator.isGoingUp() !== this.floorIndex < this.destinationFloorIndex) {
-            this.pressFloorButton();
-            return;
-        }
+        // if (elevator.isGoingUp() !== this.floorIndex < this.destinationFloorIndex) {
+        //     this.pressFloorButton();
+        //     return;
+        // }
 
         // check if can take elevator.
         if (!elevator.loadUser(this)) {
@@ -89,6 +89,7 @@ export class User extends EventHandler {
         this.isMoving = true;
         this.elevatorIndex = elevator.index;
         elevator.pressButton(this.destinationFloorIndex);
+        gameRenderer.toggleUserMoving(this);
     };
 
     public exitIfNeeded = (elevator: Elevator, floorIndex: number) => {
@@ -100,5 +101,6 @@ export class User extends EventHandler {
         this.isMoving = true;
 
         elevator.unloadUser(this);
+        gameRenderer.toggleUserMoving(this);
     };
 }

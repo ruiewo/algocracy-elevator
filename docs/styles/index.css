@@ -255,10 +255,13 @@ footer span {
   position: absolute;
   width: 3rem;
   height: 3rem;
-  background-image: url("./images/user.svg");
+  background-image: url("./images/user_idle.gif");
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+}
+.user.moving {
+  background-image: url("./images/user_run.gif");
 }
 
 .startButton {
