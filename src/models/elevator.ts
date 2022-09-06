@@ -55,21 +55,23 @@ export class Elevator extends EventHandler {
 
         // upper limit or arrived
         if (this.currentY > this.floorCount - 1 || Math.abs(this.destinationFloor - this.currentY) < 0.01) {
-            this.currentFloor = this.destinationFloor;
-            this.currentY = this.destinationFloor; // snap to floor
-            this.velocity = 0;
-            this.isMoving = false;
-
-            const nextFloor = this.getNextDestinationFloor();
-            this.state.motion =
-                nextFloor > this.currentFloor ? 'up' : nextFloor === this.currentFloor ? 'stay' : 'down';
-            console.log(this.state.motion);
-
-            this.trigger('arrived', this, this.currentFloor);
-
-            this.startWaiting();
+            this.arrived();
         }
     };
+
+    private arrived() {
+        this.currentFloor = this.destinationFloor;
+        this.currentY = this.destinationFloor; // snap to floor
+        this.velocity = 0;
+        this.isMoving = false;
+
+        const nextFloor = this.getNextDestinationFloor();
+        this.state.motion = nextFloor > this.currentFloor ? 'up' : nextFloor === this.currentFloor ? 'stay' : 'down';
+
+        this.trigger('arrived', this, this.currentFloor);
+
+        this.startWaiting();
+    }
 
     private startWaiting() {
         this.isWaiting = true;
@@ -129,8 +131,7 @@ export class Elevator extends EventHandler {
         this.isMoving = true;
 
         if (floorIndex === this.currentFloor) {
-            this.isMoving = false;
-            this.velocity = 0;
+            this.arrived();
         } else {
             const isUpward = floorIndex > this.currentFloor;
             this.velocity = this.calcVelocity(isUpward);

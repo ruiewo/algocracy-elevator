@@ -21,14 +21,19 @@ export class WorldController extends EventHandler {
         unit: 0,
     };
 
-    public start = (world: World, userCode: UserCode, requestAnimationFrame: any, autoStart = false) => {
+    public start = (
+        world: World,
+        userCode: UserCode,
+        requestAnimationFrame: (callback: FrameRequestCallback) => number,
+        autoStart = false
+    ) => {
         this.isPlaying = autoStart;
 
         let lastUpdatedTime: number | null = null;
         let firstUpdate = true;
 
         // todo remove
-        world.elevators.forEach((x, i) => x.goTo(i + 1));
+        world.elevators.forEach((x, i) => x.goTo(i));
 
         world.elevators.forEach(x =>
             x.on('userExited', () => {
