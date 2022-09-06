@@ -6,7 +6,7 @@ module.exports = {
         index: `./src/index.ts`,
     },
     output: {
-        path: path.join(__dirname, './public/js'),
+        path: path.join(__dirname, './docs/js'),
         filename: '[name].js',
         // publicPath: '/',
     },
