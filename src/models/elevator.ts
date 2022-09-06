@@ -11,8 +11,7 @@ export class Elevator extends EventHandler {
     private currentFloor = 0;
     private destinationFloor = 0;
     private buttonState: boolean[];
-    // private isMoving = false;
-    private isMoving = true;
+    private isMoving = false;
     public users: User[] = [];
 
     // waiting on floor
@@ -21,7 +20,8 @@ export class Elevator extends EventHandler {
     private currentWaitingTime = 0; //msec
 
     // for rendering
-    private velocity = 1;
+    private velocityMax = 2;
+    private velocity = 0;
     public currentY = 0;
 
     private state: {
@@ -132,7 +132,7 @@ export class Elevator extends EventHandler {
     }
 
     private calcVelocity(isUpward: boolean) {
-        return isUpward ? 1 : -1;
+        return isUpward ? this.velocityMax : -this.velocityMax;
     }
 
     // todo be private
