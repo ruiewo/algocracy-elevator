@@ -10,6 +10,7 @@ const css = `
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    user-select: none;
 }
 
 section {
@@ -63,18 +64,45 @@ const template = `<style>${css}</style>${html}`;
 
 export class CountDown extends HTMLElement {
     private time: HTMLElement;
+    private remainingTime = 99 * 60 + 60;
 
-    constructor() {
+    constructor(time?: number) {
         super();
 
         this.attachShadow({ mode: 'open' });
         this.shadowRoot!.innerHTML = template;
         this.time = this.shadowRoot!.querySelector<HTMLElement>('.time')!;
+
+        if (time != undefined) {
+            this.remainingTime = time;
+            this.update(0);
+        }
     }
 
-    public update(time: string) {
-        this.time.textContent = time;
+    public update(elapsedTime: number) {
+        const timeSec = this.remainingTime - elapsedTime;
+        if (timeSec < 0) {
+            // timeSec += 60 * 99 + 60;
+            this.time.textContent = `00:00:00`;
+            return;
+        }
+
+        const min = Math.floor(timeSec / 60)
+            .toString()
+            .padStart(2, '0');
+        const sec = Math.floor(timeSec % 60)
+            .toString()
+            .padStart(2, '0');
+        const millisecond = getDecimal(timeSec);
+
+        this.time.textContent = `${min}:${sec}:${millisecond}`; // '00:00';
     }
 }
 
 customElements.define('count-down', CountDown);
+
+function getDecimal(timeSec: number) {
+    const numStr = timeSec.toString();
+    const index = numStr.indexOf('.');
+    return index > 0 ? numStr.substring(index + 1, index + 3) : '00';
+}

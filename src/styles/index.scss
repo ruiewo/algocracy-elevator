@@ -82,10 +82,10 @@ footer {
     }
 }
 .elevator {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+    grid-auto-rows: 15px;
+
     position: absolute;
     width: 60px;
     height: 60px;
@@ -94,7 +94,7 @@ footer {
 
     .floorLabel {
         display: inline-block;
-        width: 15px;
+        width: 10px;
         height: 15px;
         line-height: 15px;
         font-size: 1rem;
