@@ -6,6 +6,7 @@ import { gameRenderer } from './gameRenderer';
 export class User extends EventHandler {
     public floorIndex = 0;
     public destinationFloorIndex = 0;
+    private floor: Floor;
     private done = false;
     public removeMe = false;
     public isMoving = false;
@@ -23,11 +24,12 @@ export class User extends EventHandler {
 
         this.floorIndex = floor.index;
         this.destinationFloorIndex = destinationFloorIndex;
+        this.floor = floor;
 
         this.position = Math.random();
         this.dom = gameRenderer.spawnUser(this.floorIndex, this.position);
 
-        this.pressFloorButton(floor);
+        this.pressFloorButton();
     }
 
     public update = (deltaTime: number) => {
@@ -54,17 +56,17 @@ export class User extends EventHandler {
         }
     };
 
-    private pressFloorButton = (floor: Floor) => {
+    private pressFloorButton = () => {
         if (this.destinationFloorIndex < this.floorIndex) {
-            floor.pressDownButton();
+            this.floor.pressDownButton();
         } else {
-            floor.pressUpButton();
+            this.floor.pressUpButton();
         }
     };
 
     public enterIfPossible = (elevator: Elevator, floorIndex: number) => {
         if (this.elevatorIndex != -1) {
-            // has already on elevator.
+            // already on elevator.
             return;
         }
 
@@ -73,18 +75,20 @@ export class User extends EventHandler {
         }
 
         // check if same direction.
-        const isGoingUp = this.floorIndex < this.destinationFloorIndex;
-        if (elevator.isGoingUp() !== isGoingUp) {
+        if (elevator.isGoingUp() !== this.floorIndex < this.destinationFloorIndex) {
+            this.pressFloorButton();
             return;
         }
 
         // check if can take elevator.
         if (!elevator.loadUser(this)) {
+            this.pressFloorButton();
             return;
         }
 
         this.isMoving = true;
         this.elevatorIndex = elevator.index;
+        elevator.pressButton(this.destinationFloorIndex);
     };
 
     public exitIfNeeded = (elevator: Elevator, floorIndex: number) => {

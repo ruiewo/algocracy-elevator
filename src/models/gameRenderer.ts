@@ -1,4 +1,5 @@
 import { Elevator } from './elevator';
+import { FloorState } from './floor';
 import { User } from './user';
 import { World } from './world';
 
@@ -7,6 +8,7 @@ const elevatorWidth = 60; // px
 const userWidth = 30;
 const userOffsetLeft = 100; // px
 
+let floors: HTMLElement[] = [];
 let elevators: HTMLElement[] = [];
 
 let elevatorOffsetLeft = 0;
@@ -18,7 +20,8 @@ export const gameRenderer = (() => {
 
     function createWorld(world: World) {
         let html = ``;
-        for (let i = 0; i < world.floors.length; i++) {
+        const floorCount = world.floors.length;
+        for (let i = 0; i < floorCount; i++) {
             html += createFloor(i);
         }
 
@@ -26,10 +29,11 @@ export const gameRenderer = (() => {
 
         elevatorOffsetLeft = (gameWidth - elevatorWidth * elevatorCount) / 2;
         for (let i = 0; i < elevatorCount; i++) {
-            html += createElevator(i, elevatorOffsetLeft);
+            html += createElevator(i, floorCount, elevatorOffsetLeft);
         }
 
         game.innerHTML = html;
+        floors = [...document.querySelectorAll<HTMLElement>('.floor')];
         elevators = [...document.querySelectorAll<HTMLElement>('.elevator')];
     }
 
@@ -68,25 +72,56 @@ export const gameRenderer = (() => {
         return user;
     }
 
+    function updateFloorButton(floorIndex: number, state: FloorState) {
+        const dom = floors[floorIndex];
+        if (state.up) {
+            dom.children[1].classList.add('active');
+        } else {
+            dom.children[1].classList.remove('active');
+        }
+
+        if (state.down) {
+            dom.children[2].classList.add('active');
+        } else {
+            dom.children[2].classList.remove('active');
+        }
+    }
+
+    function updateElevatorButton(elevatorIndex: number, floorIndex: number, buttonState: boolean) {
+        const dom = elevators[elevatorIndex];
+        if (buttonState) {
+            dom.children[floorIndex].classList.add('active');
+        } else {
+            dom.children[floorIndex].classList.remove('active');
+        }
+    }
+
     return {
         createWorld,
         updateElevator,
         updateUser,
         stickTo,
         spawnUser,
+        updateFloorButton,
+        updateElevatorButton,
     };
 })();
 
 function createFloor(index: number) {
     return `<div class="floor" style="bottom: ${
         floorHight * index
-    }px"><span class="label">${index}</span><span class="indicator up active">▲</span><span class="indicator down">▼</span></div>`;
+    }px"><span class="label">${index}</span><span class="indicator up">▲</span><span class="indicator down">▼</span></div>`;
 }
 
-function createElevator(index: number, offsetLeft: number) {
+function createElevator(index: number, floorCount: number, offsetLeft: number) {
+    let floorLabels = '';
+    for (let i = 0; i < floorCount; i++) {
+        floorLabels += `<span class="floorLabel">${i}</span>`;
+    }
+
     return `<div class="elevator" style="left: ${
         offsetLeft + elevatorWidth * index
-    }px; bottom: 0px"><span class="label">${index}</span><span class="indicator up active">▲</span><span class="indicator down">▼</span></div>`;
+    }px; bottom: 0px">${floorLabels}</div>`;
 }
 
 function createUser(floorIndex: number, position: number) {

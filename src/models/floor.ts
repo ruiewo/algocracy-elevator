@@ -1,6 +1,11 @@
 import { EventHandler } from './eventHandler';
 import { AppEvent } from './events';
 
+export type FloorState = {
+    up: boolean;
+    down: boolean;
+};
+
 export class Floor extends EventHandler {
     public index = 0;
 
@@ -20,7 +25,7 @@ export class Floor extends EventHandler {
         }
 
         this.state.up = true;
-        this.trigger(AppEvent.floorStateChanged, this.index, this.state);
+        this.trigger(AppEvent.floorStateChanged, this.state);
     }
 
     pressDownButton() {
@@ -29,6 +34,12 @@ export class Floor extends EventHandler {
         }
 
         this.state.down = true;
-        this.trigger(AppEvent.floorStateChanged, this.index, this.state);
+        this.trigger(AppEvent.floorStateChanged, this.state);
+    }
+
+    clearState() {
+        this.state.up = false;
+        this.state.down = false;
+        this.trigger(AppEvent.floorStateChanged, this.state);
     }
 }

@@ -1,4 +1,5 @@
 import { EventHandler } from './eventHandler';
+import { AppEvent } from './events';
 import { User } from './user';
 
 export type Motion = 'up' | 'down' | 'stay';
@@ -59,6 +60,15 @@ export class Elevator extends EventHandler {
         }
     };
 
+    public pressButton(floorIndex: number) {
+        const alreadyPressed = this.buttonState[floorIndex];
+        if (alreadyPressed) {
+            return;
+        }
+
+        this.trigger(AppEvent.elevatorButtonPressed, floorIndex);
+    }
+
     private arrived() {
         this.currentFloor = this.destinationFloor;
         this.currentY = this.destinationFloor; // snap to floor
@@ -68,7 +78,7 @@ export class Elevator extends EventHandler {
         const nextFloor = this.getNextDestinationFloor();
         this.state.motion = nextFloor > this.currentFloor ? 'up' : nextFloor === this.currentFloor ? 'stay' : 'down';
 
-        this.trigger('arrived', this, this.currentFloor);
+        this.trigger(AppEvent.arrived, this, this.currentFloor);
 
         this.startWaiting();
     }
@@ -149,6 +159,6 @@ export class Elevator extends EventHandler {
 
     public unloadUser = (user: User) => {
         this.users = this.users.filter(x => x !== user);
-        this.trigger('userExited');
+        this.trigger(AppEvent.userExited, this.currentFloor);
     };
 }

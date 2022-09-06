@@ -1,5 +1,5 @@
 import { Elevator } from './elevator';
-import { Floor } from './floor';
+import { Floor, FloorState } from './floor';
 import { World } from './world';
 import { EventHandler } from './eventHandler';
 import { AppEvent } from './events';
@@ -32,14 +32,25 @@ export class WorldController extends EventHandler {
         let lastUpdatedTime: number | null = null;
         let firstUpdate = true;
 
+        world.floors.forEach((floor, i) => {
+            floor.on(AppEvent.floorStateChanged, (state: FloorState) => {
+                gameRenderer.updateFloorButton(i, state);
+            });
+        });
+
         // todo remove
         world.elevators.forEach((x, i) => x.goTo(i));
 
-        world.elevators.forEach(x =>
-            x.on('userExited', () => {
+        world.elevators.forEach((x, i) => {
+            x.on(AppEvent.userExited, (floorIndex: number) => {
                 this.result.unit++;
-            })
-        );
+                gameRenderer.updateElevatorButton(i, floorIndex, false);
+            });
+
+            x.on(AppEvent.elevatorButtonPressed, (floorIndex: number) => {
+                gameRenderer.updateElevatorButton(i, floorIndex, true);
+            });
+        });
 
         // world.on('usercode_error', controller.handleUserCodeError);
 
@@ -50,7 +61,6 @@ export class WorldController extends EventHandler {
                     // This logic prevents infite loops in usercode from breaking the page permanently - don't evaluate user code until game is unpaused.
                     try {
                         userCode.initialize(world.elevators, world.floors);
-                        // world.init();
                     } catch (e) {
                         this.handleError(e);
                     }
@@ -72,11 +82,8 @@ export class WorldController extends EventHandler {
                     scaledDt -= this.frameSec;
                 }
 
-                // todo render elevator and user.
-
                 world.elevators.forEach(gameRenderer.updateElevator);
                 world.users.forEach(gameRenderer.updateUser);
-                // world.users.forEach(x => x.update(deltaTime));
 
                 resultBoard.update({ elapsedTime: world.elapsedTime, unit: this.result.unit });
                 // world.trigger('stats_display_changed'); // TODO: Trigger less often for performance reasons etc

@@ -1,4 +1,5 @@
 import { Elevator } from './elevator';
+import { AppEvent } from './events';
 import { Floor } from './floor';
 import { Random } from './random';
 import { User } from './user';
@@ -49,11 +50,14 @@ export class World {
         };
 
         for (const elevator of this.elevators) {
-            elevator.on('arrived', (_: Elevator, floorIndex: number) => {
+            elevator.on(AppEvent.arrived, (_: Elevator, floorIndex: number) => {
                 // exit user
                 elevator.users.forEach(user => {
                     user.exitIfNeeded(elevator, floorIndex);
                 });
+
+                const floor = this.floors[floorIndex];
+                floor.clearState();
 
                 // enter user
                 this.users.forEach(user => {

@@ -82,20 +82,27 @@ footer {
     }
 }
 .elevator {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     position: absolute;
     width: 60px;
     height: 60px;
     color: var(--main-color);
     border: 1px solid snow;
-    font-size: 1rem;
 
-    .label {
+    .floorLabel {
         display: inline-block;
-        font-size: 1.5rem;
-        // line-height: 20px;
-        padding: 0 1rem;
+        width: 15px;
+        height: 15px;
+        line-height: 15px;
+        font-size: 1rem;
+        text-align: center;
+        font-family: 'DSEG7Classic';
     }
-    .indicator.active {
+
+    .floorLabel.active {
         color: #2c2;
     }
 }
