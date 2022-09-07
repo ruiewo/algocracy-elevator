@@ -1,6 +1,4 @@
 import { CountDown } from '../components/countDown';
-import { AppEvent } from './events';
-import { WorldController } from './worldController';
 
 type GameResult = {
     isPlaying: boolean;
@@ -35,14 +33,20 @@ export const resultBoard = (() => {
         unitPerSec.textContent = (unit / elapsedTime!).toFixed(2);
     }
 
-    function initialize(worldController: WorldController) {
-        worldController.on(AppEvent.playStateChanged, (isPlaying: boolean) => {
-            startButton.textContent = isPlaying ? 'Stop' : 'Start';
-        });
+    function changeButtonState(isPlaying: boolean) {
+        startButton.textContent = isPlaying ? 'Stop' : 'Start';
+    }
+
+    function reset(timeLimit: number) {
+        countDown.reset(timeLimit);
+        score.textContent = '0';
+        unitPerSec.textContent = '0';
     }
 
     return {
-        initialize,
+        startButton,
         update,
+        changeButtonState,
+        reset,
     };
 })();

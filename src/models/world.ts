@@ -11,6 +11,7 @@ export type WorldOption = {
     elevatorCount: number;
     elevatorCapacity: number;
     spawnRate: number;
+    timeLimit: number;
 };
 
 export type WorldSetting = {
@@ -18,6 +19,7 @@ export type WorldSetting = {
     elevatorCount: number;
     elevatorCapacity: number;
     spawnRate: number;
+    timeLimit: number;
 };
 
 export class World {
@@ -34,21 +36,18 @@ export class World {
 
     public elapsedSinceSpawn = 0;
     public spawnInterval = 0;
-    private worldSetting: WorldSetting;
+
+    private floorCount = 0;
+    public timeLimit = 0;
 
     constructor(option: WorldOption) {
+        this.floorCount = option.floorCount;
+        this.timeLimit = option.timeLimit;
         this.random = new Random(option.seed);
 
         this.floors = this.createFloor(option.floorCount);
         this.elevators = this.createElevator(option.elevatorCount, option.floorCount, option.elevatorCapacity);
         this.users = [];
-
-        this.worldSetting = {
-            floorCount: option.floorCount,
-            elevatorCount: option.elevatorCount,
-            elevatorCapacity: option.elevatorCapacity,
-            spawnRate: option.spawnRate,
-        };
 
         for (const elevator of this.elevators) {
             elevator.on(AppEvent.arrived, (_: Elevator, floorIndex: number) => {
@@ -72,6 +71,9 @@ export class World {
 
     update = (deltaTime: number) => {
         this.elapsedTime += deltaTime;
+        if (this.elapsedTime > this.timeLimit) {
+            this.isEnded = true;
+        }
 
         this.elevators.forEach(x => x.update(deltaTime));
         this.users.forEach(x => x.update(deltaTime));
@@ -108,9 +110,8 @@ export class World {
     };
 
     private spawnUser = () => {
-        const spawnFloorIndex = this.random.nextInt(0, this.worldSetting.floorCount - 1);
-        const destinationFloor =
-            (spawnFloorIndex + this.random.nextInt(1, this.worldSetting.floorCount - 1)) % this.worldSetting.floorCount;
+        const spawnFloorIndex = this.random.nextInt(0, this.floorCount - 1);
+        const destinationFloor = (spawnFloorIndex + this.random.nextInt(1, this.floorCount - 1)) % this.floorCount;
 
         const user = new User(this.floors[spawnFloorIndex], destinationFloor);
         user.on(AppEvent.userRemoved, () => gameRenderer.removeUser(user));

@@ -97,6 +97,11 @@ export class CountDown extends HTMLElement {
 
         this.time.textContent = `${min}:${sec}:${millisecond}`; // '00:00';
     }
+
+    public reset(timeSec: number) {
+        this.remainingTime = timeSec;
+        this.update(0);
+    }
 }
 
 customElements.define('count-down', CountDown);

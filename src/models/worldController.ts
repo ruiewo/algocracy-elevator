@@ -21,6 +21,11 @@ export class WorldController extends EventHandler {
         unit: 0,
     };
 
+    constructor() {
+        super();
+        this.initialize();
+    }
+
     public start = (
         world: World,
         userCode: UserCode,
@@ -28,6 +33,7 @@ export class WorldController extends EventHandler {
         autoStart = false
     ) => {
         this.isPlaying = autoStart;
+        resultBoard.reset(world.timeLimit);
 
         let lastUpdatedTime: number | null = null;
         let firstUpdate = true;
@@ -101,12 +107,12 @@ export class WorldController extends EventHandler {
 
     public changePlayingState = (isPlaying: boolean) => {
         this.isPlaying = isPlaying;
-        this.trigger(AppEvent.playStateChanged, isPlaying);
+        resultBoard.changeButtonState(this.isPlaying);
     };
 
     public togglePlayingState = () => {
         this.isPlaying = !this.isPlaying;
-        this.trigger(AppEvent.playStateChanged, this.isPlaying);
+        resultBoard.changeButtonState(this.isPlaying);
     };
 
     public changeTimeScale = (timeScale: number) => {
@@ -118,5 +124,9 @@ export class WorldController extends EventHandler {
         this.changePlayingState(false);
         console.log('User Code Error!');
         console.log(e);
+    };
+
+    private initialize = () => {
+        resultBoard.startButton.onclick = this.togglePlayingState;
     };
 }

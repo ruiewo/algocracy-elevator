@@ -1,9 +1,8 @@
 export const AppEvent = {
     floorStateChanged: 'floorStateChanged',
-    playStateChanged: 'playStateChanged',
     elevatorButtonPressed: 'elevatorButtonPressed',
-    userExited: 'userExited',
     arrived: 'arrived',
+    userExited: 'userExited',
     userRemoved: 'userRemoved',
     userStateChanged: 'userStateChanged',
 } as const;

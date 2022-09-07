@@ -57,13 +57,6 @@ export const gameRenderer = (() => {
         users.get(user)!.style.left = worldX + 'px';
     }
 
-    function stickTo(user: User) {
-        const targetX =
-            elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.randomOffset;
-        const worldX = (targetX - userOffsetLeft) * user.currentX + userOffsetLeft;
-        users.get(user)!.style.left = worldX + 'px';
-    }
-
     function toggleUserMoving(user: User) {
         users.get(user)!.classList.toggle('moving');
     }
@@ -107,7 +100,6 @@ export const gameRenderer = (() => {
         loadWorld,
         updateElevator,
         updateUser,
-        stickTo,
         toggleUserMoving,
         spawnUser,
         removeUser,
