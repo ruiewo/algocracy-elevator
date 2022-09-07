@@ -3,7 +3,7 @@ import { javascript } from '@codemirror/lang-javascript';
 import { solarizedDark } from '../lib/craftzdog/solarized-dark';
 
 export const createEditor = () => {
-    const codeEditor = document.querySelector('.codeEditor') as HTMLTextAreaElement;
+    const codeEditor = document.querySelector('.codeEditor') as HTMLElement;
 
     const editor = new EditorView({
         doc: `const defaultSetting = {

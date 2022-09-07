@@ -1,9 +1,11 @@
 export const createHeader = () => {
     const container = document.createElement('div');
     container.classList.add('container');
-    container.insertAdjacentHTML('beforeend', `<span class="appIcon"></span>`);
-    container.insertAdjacentHTML('beforeend', `<span class="title">Algocracy - Elevator</span>`);
-    container.insertAdjacentHTML('beforeend', `<span class="divider"></span>`);
+    const headerHtml =
+        `<span class="appIcon"></span>` +
+        `<span class="title">Algocracy - Elevator</span>` +
+        `<span class="divider"></span>`;
+    container.insertAdjacentHTML('beforeend', headerHtml);
 
     container.appendChild(createButton({ label: 'Document' }));
     container.appendChild(createButton({ label: 'Ranking' }));
