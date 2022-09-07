@@ -20,7 +20,7 @@ header {
         flex-grow: 1;
     }
 
-    .btn {
+    .rippleButton {
         color: var(--main-color);
         font-size: 2rem;
     }
@@ -38,7 +38,7 @@ header {
     background-size: contain;
 }
 
-.btn {
+.rippleButton {
     position: relative;
     width: 15rem;
     height: 4rem;

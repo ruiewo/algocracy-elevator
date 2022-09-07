@@ -83,7 +83,7 @@ header .title {
 header .divider {
   flex-grow: 1;
 }
-header .btn {
+header .rippleButton {
   color: var(--main-color);
   font-size: 2rem;
 }
@@ -99,7 +99,7 @@ header .btn {
   background-size: contain;
 }
 
-.btn {
+.rippleButton {
   position: relative;
   width: 15rem;
   height: 4rem;
@@ -110,7 +110,7 @@ header .btn {
   overflow: hidden;
   cursor: pointer;
 }
-.btn:hover {
+.rippleButton:hover {
   text-decoration: underline;
 }
 

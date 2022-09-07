@@ -32,7 +32,7 @@ type ButtonOption = {
 
 function createButton(option: ButtonOption) {
     const button = document.createElement('button');
-    button.classList.add('btn');
+    button.classList.add('rippleButton');
     button.textContent = option.label;
 
     button.addEventListener('click', e => {
