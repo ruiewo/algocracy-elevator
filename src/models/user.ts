@@ -1,10 +1,10 @@
 import { Elevator } from './elevator';
 import { EventHandler } from './eventHandler';
+import { AppEvent } from './events';
 import { Floor } from './floor';
-import { gameRenderer } from './gameRenderer';
 
 export class User extends EventHandler {
-    private floorIndex = 0;
+    public floorIndex = 0;
     private destinationFloorIndex = 0;
 
     private isMoving = false;
@@ -16,8 +16,7 @@ export class User extends EventHandler {
     public currentX = 0;
     public elevatorIndex = -1;
 
-    public dom: HTMLElement;
-    public position: number;
+    public randomOffset: number;
 
     private pressFloorButton: () => void;
 
@@ -27,8 +26,7 @@ export class User extends EventHandler {
         this.floorIndex = floor.index;
         this.destinationFloorIndex = destinationFloorIndex;
 
-        this.position = Math.random();
-        this.dom = gameRenderer.spawnUser(this.floorIndex, this.position);
+        this.randomOffset = Math.random();
 
         this.pressFloorButton =
             this.destinationFloorIndex > this.floorIndex ? floor.pressUpButton : floor.pressDownButton;
@@ -55,8 +53,6 @@ export class User extends EventHandler {
             this.setMovingState(false);
             this.currentX = 1;
             this.done = true;
-
-            gameRenderer.stickTo(this);
         }
     };
 
@@ -99,7 +95,7 @@ export class User extends EventHandler {
 
     private setMovingState = (state: boolean) => {
         if (this.isMoving !== state) {
-            gameRenderer.toggleUserMoving(this);
+            this.trigger(AppEvent.userStateChanged);
         }
 
         this.isMoving = state;

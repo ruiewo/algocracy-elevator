@@ -36,7 +36,7 @@ export const gameManager = (() => {
 
     function createWorld(option: WorldOption) {
         const world = new World(option);
-        gameRenderer.createWorld(world);
+        gameRenderer.loadWorld(world);
 
         return world;
     }

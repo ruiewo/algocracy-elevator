@@ -4,6 +4,8 @@ export const AppEvent = {
     elevatorButtonPressed: 'elevatorButtonPressed',
     userExited: 'userExited',
     arrived: 'arrived',
+    userRemoved: 'userRemoved',
+    userStateChanged: 'userStateChanged',
 } as const;
 
 export const triggerEvent = (event: string, element: HTMLElement) => {

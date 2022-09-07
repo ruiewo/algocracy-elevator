@@ -10,6 +10,7 @@ const userOffsetLeft = 100; // px
 
 let floors: HTMLElement[] = [];
 let elevators: HTMLElement[] = [];
+const users = new WeakMap<User, HTMLElement>();
 
 let elevatorOffsetLeft = 0;
 
@@ -18,7 +19,7 @@ export const gameRenderer = (() => {
     const rect = game.getBoundingClientRect();
     const gameWidth = rect.width;
 
-    function createWorld(world: World) {
+    function loadWorld(world: World) {
         let html = ``;
         const floorCount = world.floors.length;
         for (let i = 0; i < floorCount; i++) {
@@ -43,33 +44,39 @@ export const gameRenderer = (() => {
         dom.style.bottom = worldY + 'px';
 
         elevator.users.forEach(user => {
-            user.dom.style.bottom = worldY + 'px';
+            users.get(user)!.style.bottom = worldY + 'px';
         });
     }
 
     function updateUser(user: User) {
         const targetX =
-            elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.position;
-        const startPos = calcStartPosition(user.position);
+            elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.randomOffset;
+        const startPos = calcStartPosition(user.randomOffset);
         const worldX = (targetX - startPos) * user.currentX + startPos;
-        user.dom.style.left = worldX + 'px';
+
+        users.get(user)!.style.left = worldX + 'px';
     }
 
     function stickTo(user: User) {
         const targetX =
-            elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.position;
+            elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.randomOffset;
         const worldX = (targetX - userOffsetLeft) * user.currentX + userOffsetLeft;
-        user.dom.style.left = worldX + 'px';
+        users.get(user)!.style.left = worldX + 'px';
     }
 
     function toggleUserMoving(user: User) {
-        user.dom.classList.toggle('moving');
+        users.get(user)!.classList.toggle('moving');
     }
 
-    function spawnUser(floorIndex: number, position: number) {
-        const user = createUser(floorIndex, position);
-        game.appendChild(user);
-        return user;
+    function spawnUser(user: User) {
+        const dom = createUser(user.floorIndex, user.randomOffset);
+        game.appendChild(dom);
+        users.set(user, dom);
+    }
+
+    function removeUser(user: User) {
+        users.get(user)!.remove();
+        users.delete(user);
     }
 
     function updateFloorButton(floorIndex: number, state: FloorState) {
@@ -97,12 +104,13 @@ export const gameRenderer = (() => {
     }
 
     return {
-        createWorld,
+        loadWorld,
         updateElevator,
         updateUser,
         stickTo,
         toggleUserMoving,
         spawnUser,
+        removeUser,
         updateFloorButton,
         updateElevatorButton,
     };

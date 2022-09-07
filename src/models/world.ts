@@ -1,6 +1,7 @@
 import { Elevator } from './elevator';
 import { AppEvent } from './events';
 import { Floor } from './floor';
+import { gameRenderer } from './gameRenderer';
 import { Random } from './random';
 import { User } from './user';
 
@@ -78,8 +79,8 @@ export class World {
         for (let i = this.users.length - 1; i >= 0; i--) {
             const user = this.users[i];
             if (user.removeMe) {
+                user.trigger(AppEvent.userRemoved);
                 this.users.splice(i, 1);
-                user.dom.remove();
             }
         }
 
@@ -111,6 +112,11 @@ export class World {
         const destinationFloor =
             (spawnFloorIndex + this.random.nextInt(1, this.worldSetting.floorCount - 1)) % this.worldSetting.floorCount;
 
-        this.users.push(new User(this.floors[spawnFloorIndex], destinationFloor));
+        const user = new User(this.floors[spawnFloorIndex], destinationFloor);
+        user.on(AppEvent.userRemoved, () => gameRenderer.removeUser(user));
+        user.on(AppEvent.userStateChanged, () => gameRenderer.toggleUserMoving(user));
+        gameRenderer.spawnUser(user);
+
+        this.users.push(user);
     };
 }
