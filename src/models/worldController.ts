@@ -1,7 +1,6 @@
 import { Elevator } from './elevator';
 import { Floor, FloorState } from './floor';
 import { World } from './world';
-import { EventHandler } from './eventHandler';
 import { AppEvent } from './events';
 import { resultBoard } from './resultBoard';
 import { gameRenderer } from './gameRenderer';
@@ -11,28 +10,29 @@ type UserCode = {
     update: (dt: number, elevators: Elevator[], floors: Floor[]) => void;
 };
 
-export class WorldController extends EventHandler {
-    private frame = 60;
-    private frameSec = 1 / this.frame;
-    private timeScale = 1.0;
-    private isPlaying = false;
+const frame = 60;
+const frameSec = 1 / frame;
+let timeScale = 1.0;
+let isPlaying = false;
 
-    private result = {
-        unit: 0,
-    };
+const result = {
+    unit: 0,
+};
 
-    constructor() {
-        super();
-        this.initialize();
+export const worldController = (() => {
+    initialize();
+
+    function initialize() {
+        resultBoard.startButton.onclick = togglePlayingState;
     }
 
-    public start = (
+    function start(
         world: World,
         userCode: UserCode,
         requestAnimationFrame: (callback: FrameRequestCallback) => number,
         autoStart = false
-    ) => {
-        this.isPlaying = autoStart;
+    ) {
+        isPlaying = autoStart;
         resultBoard.reset(world.timeLimit);
 
         let lastUpdatedTime: number | null = null;
@@ -49,7 +49,7 @@ export class WorldController extends EventHandler {
 
         world.elevators.forEach((x, i) => {
             x.on(AppEvent.userExited, (floorIndex: number) => {
-                this.result.unit++;
+                result.unit++;
                 gameRenderer.updateElevatorButton(i, floorIndex, false);
             });
 
@@ -61,38 +61,38 @@ export class WorldController extends EventHandler {
         // world.on('usercode_error', controller.handleUserCodeError);
 
         const updater = (time: number) => {
-            if (this.isPlaying && !world.isEnded && lastUpdatedTime !== null) {
+            if (isPlaying && !world.isEnded && lastUpdatedTime !== null) {
                 if (firstUpdate) {
                     firstUpdate = false;
                     // This logic prevents infite loops in usercode from breaking the page permanently - don't evaluate user code until game is unpaused.
                     try {
                         userCode.initialize(world.elevators, world.floors);
                     } catch (e) {
-                        this.handleError(e);
+                        handleError(e);
                     }
                 }
 
                 const deltaTime = time - lastUpdatedTime;
-                let scaledDt = deltaTime * 0.001 * this.timeScale;
-                scaledDt = Math.min(scaledDt, this.frameSec * 3 * this.timeScale); // Limit to prevent unhealthy substepping
+                let scaledDt = deltaTime * 0.001 * timeScale;
+                scaledDt = Math.min(scaledDt, frameSec * 3 * timeScale); // Limit to prevent unhealthy substepping
 
                 try {
                     userCode.update(scaledDt, world.elevators, world.floors);
                 } catch (e) {
-                    this.handleError(e);
+                    handleError(e);
                 }
 
                 while (scaledDt > 0.0 && !world.isEnded) {
-                    const thisDt = Math.min(this.frameSec, scaledDt);
+                    const thisDt = Math.min(frameSec, scaledDt);
                     world.update(thisDt);
-                    scaledDt -= this.frameSec;
+                    scaledDt -= frameSec;
                 }
 
                 world.elevators.forEach(gameRenderer.updateElevator);
                 world.users.forEach(gameRenderer.updateUser);
 
-                resultBoard.update({ elapsedTime: world.elapsedTime, unit: this.result.unit });
-                // world.trigger('stats_display_changed'); // TODO: Trigger less often for performance reasons etc
+                resultBoard.update({ elapsedTime: world.elapsedTime, unit: result.unit });
+                // TODO: Trigger less often for performance reasons etc
             }
 
             lastUpdatedTime = time;
@@ -103,30 +103,30 @@ export class WorldController extends EventHandler {
         };
 
         requestAnimationFrame(updater);
-    };
+    }
 
-    public changePlayingState = (isPlaying: boolean) => {
-        this.isPlaying = isPlaying;
-        resultBoard.changeButtonState(this.isPlaying);
-    };
+    function changePlayingState(_isPlaying: boolean) {
+        isPlaying = _isPlaying;
+        resultBoard.changeButtonState(isPlaying);
+    }
 
-    public togglePlayingState = () => {
-        this.isPlaying = !this.isPlaying;
-        resultBoard.changeButtonState(this.isPlaying);
-    };
+    function togglePlayingState() {
+        isPlaying = !isPlaying;
+        resultBoard.changeButtonState(isPlaying);
+    }
 
-    public changeTimeScale = (timeScale: number) => {
-        this.timeScale = timeScale;
+    function changeTimeScale(_timeScale: number) {
+        timeScale = _timeScale;
         // controller.trigger('timescale_changed');
-    };
+    }
 
-    private handleError = (e: any) => {
-        this.changePlayingState(false);
+    function handleError(e: any) {
+        changePlayingState(false);
         console.log('User Code Error!');
         console.log(e);
-    };
+    }
 
-    private initialize = () => {
-        resultBoard.startButton.onclick = this.togglePlayingState;
+    return {
+        start,
     };
-}
+})();
