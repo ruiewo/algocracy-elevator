@@ -5,6 +5,7 @@ export const AppEvent = {
     userExited: 'userExited',
     userRemoved: 'userRemoved',
     userStateChanged: 'userStateChanged',
+    idle: 'idle',
 } as const;
 
 export const triggerEvent = (event: string, element: HTMLElement) => {

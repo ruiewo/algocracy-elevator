@@ -1,5 +1,6 @@
 import { EventHandler } from './eventHandler';
 import { AppEvent } from './events';
+import { Queue } from './queue';
 import { User } from './user';
 
 export type Motion = 'up' | 'down' | 'stay';
@@ -27,12 +28,14 @@ export class Elevator extends EventHandler {
     private state: {
         up: boolean;
         down: boolean;
-        motion: Motion;
+        direction: Motion;
     } = {
         up: false,
         down: false,
-        motion: 'up',
+        direction: 'up',
     };
+
+    public destinationQUeue = new Queue<number>();
 
     constructor(index: number, floorCount: number, capacity: number) {
         super();
@@ -71,7 +74,7 @@ export class Elevator extends EventHandler {
     };
 
     public isGoingUp = () => {
-        return this.state.motion === 'up';
+        return this.state.direction === 'up';
     };
 
     // todo be private
@@ -101,9 +104,18 @@ export class Elevator extends EventHandler {
         this.trigger(AppEvent.userExited, this.currentFloor);
     };
 
+    private checkNextDestinationFloor = () => {
+        if (this.destinationQUeue.length === 0) {
+            this.trigger(AppEvent.idle);
+        }
+
+        const nextFloor = this.destinationQUeue.checkFirstQueue();
+        this.state.direction = nextFloor === undefined ? 'stay' : nextFloor > this.currentFloor ? 'up' : 'down';
+    };
+
     private getNextDestinationFloor = () => {
-        // todo replace
-        return (this.currentFloor + 1) % this.floorCount;
+        const floorIndex = this.destinationQUeue.dequeue();
+        return floorIndex === undefined ? this.currentFloor : floorIndex;
     };
 
     private calcVelocity = (isUpward: boolean) => {
@@ -115,8 +127,7 @@ export class Elevator extends EventHandler {
         this.currentY = this.destinationFloor; // snap to floor
         this.startWaiting();
 
-        const nextFloor = this.getNextDestinationFloor();
-        this.state.motion = nextFloor > this.currentFloor ? 'up' : nextFloor === this.currentFloor ? 'stay' : 'down';
+        this.checkNextDestinationFloor();
 
         this.trigger(AppEvent.arrived, this, this.currentFloor);
     };

@@ -42,4 +42,9 @@ export class Floor extends EventHandler {
         this.state.down = false;
         this.trigger(AppEvent.floorStateChanged, this.state);
     };
+
+    getState = () => {
+        // todo should be readonly
+        return this.state;
+    };
 }

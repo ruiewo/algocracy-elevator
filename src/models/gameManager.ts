@@ -1,4 +1,5 @@
 import { Elevator } from './elevator';
+import { AppEvent } from './events';
 import { Floor } from './floor';
 import { gameRenderer } from './gameRenderer';
 import { World, WorldOption } from './world';
@@ -14,13 +15,26 @@ export const gameManager = (() => {
             elevatorCount: 2,
             elevatorCapacity: 4,
             spawnRate: 2,
-            timeLimit: 10,
+            timeLimit: 30,
         });
 
         worldController.start(
             world,
             {
-                initialize: (elevators: Elevator[], floors: Floor[]) => {},
+                initialize: (elevators: Elevator[], floors: Floor[]) => {
+                    elevators.forEach((elevator, i) => {
+                        elevator.on(AppEvent.idle, () => {
+                            for (let i = 0; i < floors.length; i++) {
+                                const state = floors[i].getState();
+                                if (state.up || state.down) {
+                                    elevator.destinationQUeue.enqueue(i);
+                                }
+                            }
+                        });
+
+                        elevator.destinationQUeue.enqueue(i);
+                    });
+                },
                 update: (dt: number, elevators: Elevator[], floors: Floor[]) => {},
             },
             window.requestAnimationFrame,
