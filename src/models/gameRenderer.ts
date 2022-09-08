@@ -77,26 +77,13 @@ export const gameRenderer = (() => {
 
     function updateFloorButton(floorIndex: number, state: FloorState) {
         const dom = floors[floorIndex];
-        if (state.up) {
-            dom.children[1].classList.add('active');
-        } else {
-            dom.children[1].classList.remove('active');
-        }
-
-        if (state.down) {
-            dom.children[2].classList.add('active');
-        } else {
-            dom.children[2].classList.remove('active');
-        }
+        dom.children[1].classList.toggle('active', state.up);
+        dom.children[2].classList.toggle('active', state.down);
     }
 
     function updateElevatorButton(elevatorIndex: number, floorIndex: number, buttonState: boolean) {
-        const dom = elevators[elevatorIndex];
-        if (buttonState) {
-            dom.children[floorIndex].classList.add('active');
-        } else {
-            dom.children[floorIndex].classList.remove('active');
-        }
+        const floorMark = elevators[elevatorIndex].children[floorIndex];
+        floorMark.classList.toggle('active', buttonState);
     }
 
     return {

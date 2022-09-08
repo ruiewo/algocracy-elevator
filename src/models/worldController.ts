@@ -97,9 +97,12 @@ export const worldController = (() => {
 
             lastUpdatedTime = time;
 
-            if (!world.isEnded) {
-                requestAnimationFrame(updater);
+            if (world.isEnded) {
+                changePlayingState(false);
+                return;
             }
+
+            requestAnimationFrame(updater);
         };
 
         requestAnimationFrame(updater);
