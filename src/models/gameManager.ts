@@ -15,7 +15,7 @@ export const gameManager = (() => {
             elevatorCount: 2,
             elevatorCapacity: 4,
             spawnRate: 2,
-            timeLimit: 10,
+            timeLimit: 30,
         });
 
         worldController.start(

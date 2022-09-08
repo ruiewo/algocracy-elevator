@@ -40,7 +40,7 @@ export const resultBoard = (() => {
     function reset(timeLimit: number) {
         countDown.reset(timeLimit);
         score.textContent = '0';
-        unitPerSec.textContent = '0';
+        unitPerSec.textContent = '0.00';
     }
 
     return {
