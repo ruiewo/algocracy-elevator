@@ -45,7 +45,7 @@ export const worldController = (() => {
         });
 
         // todo remove
-        world.elevators.forEach((x, i) => x.goTo(i));
+        world.elevators.forEach((x, i) => x.goTo(0));
 
         world.elevators.forEach((x, i) => {
             x.on(AppEvent.userExited, (floorIndex: number) => {

@@ -31,8 +31,6 @@ export const gameManager = (() => {
                                 }
                             }
                         });
-
-                        elevator.destinationQUeue.enqueue(i);
                     });
                 },
                 update: (dt: number, elevators: Elevator[], floors: Floor[]) => {},
