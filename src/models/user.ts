@@ -16,7 +16,7 @@ export class User extends EventHandler {
     public currentX = 0;
     public elevatorIndex = -1;
 
-    public randomOffset: number;
+    public offsetRatio: number;
 
     private pressFloorButton: () => void;
 
@@ -26,7 +26,7 @@ export class User extends EventHandler {
         this.floorIndex = floor.index;
         this.destinationFloorIndex = destinationFloorIndex;
 
-        this.randomOffset = Math.random();
+        this.offsetRatio = Math.random();
 
         this.pressFloorButton =
             this.destinationFloorIndex > this.floorIndex ? floor.pressUpButton : floor.pressDownButton;

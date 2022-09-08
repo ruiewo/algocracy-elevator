@@ -3,22 +3,23 @@ import { FloorState } from './floor';
 import { User } from './user';
 import { World } from './world';
 
+const game = document.querySelector('.game')!;
+const gameWidth = game.getBoundingClientRect().width;
+
 const floorHight = 60; // px
 const elevatorWidth = 60; // px
 const userWidth = 30;
 const userOffsetLeft = 100; // px
 
+let elevatorOffsetLeft = 0;
+let userRandomAreaWidth = 0;
+const elevatorRandomAreaWidth = elevatorWidth - userWidth;
+
 let floors: HTMLElement[] = [];
 let elevators: HTMLElement[] = [];
 const users = new WeakMap<User, HTMLElement>();
 
-let elevatorOffsetLeft = 0;
-
 export const gameRenderer = (() => {
-    const game = document.querySelector('.game')!;
-    const rect = game.getBoundingClientRect();
-    const gameWidth = rect.width;
-
     function loadWorld(world: World) {
         let html = ``;
         const floorCount = world.floors.length;
@@ -29,6 +30,8 @@ export const gameRenderer = (() => {
         const elevatorCount = world.elevators.length;
 
         elevatorOffsetLeft = (gameWidth - elevatorWidth * elevatorCount) / 2;
+        userRandomAreaWidth = elevatorOffsetLeft - userOffsetLeft - userWidth;
+
         for (let i = 0; i < elevatorCount; i++) {
             html += createElevator(i, floorCount, elevatorOffsetLeft);
         }
@@ -50,8 +53,8 @@ export const gameRenderer = (() => {
 
     function updateUser(user: User) {
         const targetX =
-            elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + (elevatorWidth - userWidth) * user.randomOffset;
-        const startPos = calcStartPosition(user.randomOffset);
+            elevatorOffsetLeft + elevatorWidth * user.elevatorIndex + elevatorRandomAreaWidth * user.offsetRatio;
+        const startPos = calcStartPosition(user.offsetRatio);
         const worldX = (targetX - startPos) * user.currentX + startPos;
 
         users.get(user)!.style.left = worldX + 'px';
@@ -62,7 +65,7 @@ export const gameRenderer = (() => {
     }
 
     function spawnUser(user: User) {
-        const dom = createUser(user.floorIndex, user.randomOffset);
+        const dom = createUser(user.floorIndex, user.offsetRatio);
         game.appendChild(dom);
         users.set(user, dom);
     }
@@ -134,6 +137,6 @@ function createUser(floorIndex: number, position: number) {
     return user;
 }
 
-function calcStartPosition(position: number) {
-    return (elevatorOffsetLeft - userOffsetLeft - userWidth) * position + userOffsetLeft;
+function calcStartPosition(offsetRatio: number) {
+    return userRandomAreaWidth * offsetRatio + userOffsetLeft;
 }
