@@ -49,11 +49,13 @@ export const createEditor = () => {
         const codeObj = eval(codeStr) as UserCode;
 
         if (typeof codeObj.initialize !== 'function') {
-            throw 'Code must contain an init function';
+            throw new Error('Code must contain an initialize function');
         }
+
         if (typeof codeObj.update !== 'function') {
-            throw 'Code must contain an update function';
+            throw new Error('Code must contain an update function');
         }
+
         return codeObj;
     }
 
