@@ -4,10 +4,10 @@ import { gameManager } from './models/gameManager';
 
 function initialize() {
     createHeader();
-    createEditor();
+    const editor = createEditor();
     createFooter();
 
-    gameManager.run();
+    gameManager.run(editor);
 }
 
 initialize();

@@ -1,14 +1,9 @@
-import { Elevator } from './elevator';
-import { Floor, FloorState } from './floor';
+import { FloorState } from './floor';
 import { World } from './world';
 import { AppEvent } from './events';
 import { resultBoard } from './resultBoard';
 import { gameRenderer } from './gameRenderer';
-
-type UserCode = {
-    initialize: (elevators: Elevator[], floors: Floor[]) => void;
-    update: (dt: number, elevators: Elevator[], floors: Floor[]) => void;
-};
+import { UserCode } from '../components/editor';
 
 const frame = 60;
 const frameSec = 1 / frame;

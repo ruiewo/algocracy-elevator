@@ -1,3 +1,4 @@
+import { Editor, UserCode } from '../components/editor';
 import { Elevator } from './elevator';
 import { AppEvent } from './events';
 import { Floor } from './floor';
@@ -8,7 +9,7 @@ import { worldController } from './worldController';
 export const gameManager = (() => {
     let world: World;
 
-    function run() {
+    function run(editor: Editor) {
         world = createWorld({
             seed: 0,
             floorCount: 4,
@@ -18,9 +19,12 @@ export const gameManager = (() => {
             timeLimit: 30,
         });
 
-        worldController.start(
-            world,
-            {
+        let userCode: UserCode;
+        if (true) {
+            userCode = editor.getCode();
+            console.log(userCode);
+        } else {
+            userCode = {
                 initialize: (elevators: Elevator[], floors: Floor[]) => {
                     elevators.forEach((elevator, i) => {
                         elevator.on(AppEvent.idle, () => {
@@ -34,10 +38,10 @@ export const gameManager = (() => {
                     });
                 },
                 update: (dt: number, elevators: Elevator[], floors: Floor[]) => {},
-            },
-            window.requestAnimationFrame,
-            false
-        );
+            };
+        }
+
+        worldController.start(world, userCode, window.requestAnimationFrame, false);
     }
 
     function createWorld(option: WorldOption) {
